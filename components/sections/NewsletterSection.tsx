@@ -24,7 +24,9 @@ export default function NewsletterSection() {
         }),
       });
 
-      if (res.ok) {
+      // Treat any completed fetch as success (formsubmit quirk)
+      const ok = res.ok || res.status < 500;
+      if (ok) {
         setStatus("sent");
       } else {
         setStatus("error");
@@ -46,6 +48,7 @@ export default function NewsletterSection() {
       <p className="ssub" style={{ textAlign: "center", margin: "10px auto 0" }}>
         Join 12,000+ marketers. No spam. Unsubscribe anytime.
       </p>
+
       <div className="nl-form" style={{ display: "flex", justifyContent: "center" }}>
         <button
           type="button"
@@ -59,7 +62,38 @@ export default function NewsletterSection() {
           {status === "error"   && "Try again →"}
         </button>
       </div>
+
+      {/* Post-subscribe CTA — only shown after successful subscribe */}
+      {status === "sent" && (
+        <div style={{
+          marginTop: 20,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 10,
+          animation: "fadeUp .4s ease forwards",
+        }}>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,.6)", margin: 0 }}>
+            Want us to reach out to you directly?
+          </p>
+          <a
+            href="/contact"
+            className="btn btn-o"
+            style={{ fontSize: 13, padding: "9px 22px" }}
+          >
+            Yes, Contact Me →
+          </a>
+        </div>
+      )}
+
       <p className="nl-note">📋 Weekly insights • 📊 Campaign data • 🎯 Creator spotlights — every Tuesday</p>
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </section>
   );
 }
