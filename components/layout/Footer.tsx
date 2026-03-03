@@ -107,7 +107,7 @@ export default function Footer() {
               className="soc soc-ig" target="_blank" rel="noreferrer" aria-label="Instagram">
               <InstagramIcon />
             </a>
-            <a href="https://www.linkedin.com/company/avenue-marketing-agency"
+            <a href="https://www.linkedin.com/"
               className="soc soc-li" target="_blank" rel="noreferrer" aria-label="LinkedIn">
               <LinkedInIcon />
             </a>
