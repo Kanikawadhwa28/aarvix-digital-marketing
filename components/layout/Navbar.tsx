@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import BrandLogo from "@/components/ui/BrandLogo";
 
@@ -8,16 +8,16 @@ const NAV_ITEMS = [
   {
     label: "Top Creators",
     links: [
-      { icon: "😄", text: "Comedy",   href: "/#top-creators" },
-      { icon: "💰", text: "Finance",  href: "/#top-creators" },
-      { icon: "👶", text: "Parenting",href: "/#top-creators" },
-      { icon: "💄", text: "Beauty",   href: "/#top-creators" },
-      { icon: "👗", text: "Fashion",  href: "/#top-creators" },
-      { icon: "💪", text: "Fitness",  href: "/#top-creators" },
-      { icon: "🍕", text: "Food",     href: "/#top-creators" },
-      { icon: "🎮", text: "Gaming",   href: "/#top-creators" },
-      { icon: "📱", text: "Tech",     href: "/#top-creators" },
-      { icon: "✈️", text: "Travel",   href: "/#top-creators" },
+      { icon: "😄", text: "Comedy",    href: "/#top-creators" },
+      { icon: "💰", text: "Finance",   href: "/#top-creators" },
+      { icon: "👶", text: "Parenting", href: "/#top-creators" },
+      { icon: "💄", text: "Beauty",    href: "/#top-creators" },
+      { icon: "👗", text: "Fashion",   href: "/#top-creators" },
+      { icon: "💪", text: "Fitness",   href: "/#top-creators" },
+      { icon: "🍕", text: "Food",      href: "/#top-creators" },
+      { icon: "🎮", text: "Gaming",    href: "/#top-creators" },
+      { icon: "📱", text: "Tech",      href: "/#top-creators" },
+      { icon: "✈️", text: "Travel",    href: "/#top-creators" },
     ],
     wide: true,
     matchPaths: ["/"],
@@ -41,9 +41,9 @@ const NAV_ITEMS = [
   {
     label: "Products",
     links: [
-      { icon: "📊", text: "Dashboard",        href: "/platform#products" },
-      { icon: "💲", text: "Fair Price Index", href: "/platform#products" },
-      { icon: "🎯", text: "Competitor Tracker",href: "/platform#products" },
+      { icon: "📊", text: "Dashboard",          href: "/platform#products" },
+      { icon: "💲", text: "Fair Price Index",   href: "/platform#products" },
+      { icon: "🎯", text: "Competitor Tracker", href: "/platform#products" },
     ],
     matchPaths: ["/platform"],
   },
@@ -80,6 +80,7 @@ export default function Navbar() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [mobOpen, setMobOpen]     = useState(false);
   const [scrolled, setScrolled]   = useState(false);
+  const navRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -87,245 +88,233 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close drawer on route change
+  // Close drawer + dropdowns on route change
   useEffect(() => { setMobOpen(false); setOpenIndex(null); }, [pathname]);
+
+  // Close desktop dropdown when clicking outside the nav
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenIndex(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const isActive = (item: typeof NAV_ITEMS[0]) =>
     item.matchPaths.some(p => pathname === p || (p !== "/" && pathname.startsWith(p)));
 
+  // Click same heading again → close; click different → open that one
+  const toggleDesktop = (i: number) =>
+    setOpenIndex(prev => prev === i ? null : i);
+
   return (
     <>
       <style>{`
-        #nav {
-          position: fixed;
-          top: 0; left: 0;
-          width: 100%; max-width: 100vw;
-          z-index: 1000;
-          padding: 0 clamp(16px, 4vw, 3.5%);
-          transition: background .4s ease, border-color .4s ease, backdrop-filter .4s ease;
-          overflow: visible; /* CRITICAL: must be visible for dropdowns */
-        }
-        #nav.scrolled {
-          background: rgba(5,5,8,.93);
-          backdrop-filter: blur(22px);
-          border-bottom: 1px solid rgba(255,255,255,.06);
+        /* ── AARVIX COLOR TOKENS ── */
+        :root {
+          --aarvix-gold-start: #C9972B;
+          --aarvix-gold-mid:   #E5B75C;
+          --aarvix-gold-end:   #F4D06F;
+          --aarvix-black:      #000000;
+          --aarvix-black-soft: #0a0a0a;
+          --aarvix-black-card: #111111;
         }
 
-        /* Override globals.css grid layout — nav needs flex */
+        #nav {
+          position: fixed; top: 0; left: 0;
+          width: 100%; max-width: 100vw; z-index: 1000;
+          padding: 0 clamp(16px, 4vw, 3.5%);
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid rgba(201,151,43,.2);
+          transition: background .4s ease, border-color .4s ease, backdrop-filter .4s ease;
+          overflow: visible;
+        }
+        #nav.scrolled {
+          background: rgba(0,0,0,.97);
+          backdrop-filter: blur(28px);
+          border-bottom: 1px solid rgba(229,183,92,.3);
+          box-shadow: 0 4px 32px rgba(0,0,0,.8), 0 1px 0 rgba(255,215,0,.08);
+        }
         #nav .nav-inner {
-          display: flex !important;
-          align-items: center !important;
-          height: 66px !important;
-          gap: 0 !important;
+          display: flex !important; align-items: center !important;
+          height: 66px !important; gap: 0 !important;
           grid-template-columns: unset !important;
         }
 
-        /* ── LOGO ── */
+        /* ── LOGO — gold gradient text ── */
         a.nav-logo {
-          display: flex;
-          align-items: center;
-          gap: 7px;
-          text-decoration: none;
-          flex-shrink: 0;
-          margin-right: 20px;
+          display: flex; align-items: center; gap: 9px;
+          text-decoration: none; flex-shrink: 0; margin-right: 24px;
         }
         a.nav-logo .nav-logo-text {
           font-family: var(--disp, 'Syne', sans-serif);
-          font-size: 20px;
-          font-weight: 800;
-          color: var(--text, #f5f5f7);
-          letter-spacing: -0.5px;
-          white-space: nowrap;
-          line-height: 1;
+          font-size: 20px; font-weight: 800;
+          background: linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          letter-spacing: 0.5px; white-space: nowrap; line-height: 1;
         }
-        a.nav-logo .nav-logo-text em { color: var(--gold, #FFD700); font-style: normal; }
         .nav-logo-dot {
-          width: 7px; height: 7px;
-          border-radius: 50%;
-          background: var(--gold, #FFD700);
-          flex-shrink: 0;
-          animation: pdot 2s infinite;
+          width: 7px; height: 7px; border-radius: 50%;
+          background: linear-gradient(135deg, #C9972B, #F4D06F);
+          flex-shrink: 0; animation: pdot 2s infinite;
         }
         @keyframes pdot {
-          0%,100% { box-shadow: 0 0 0 0 rgba(255,215,0,.4); }
-          50%      { box-shadow: 0 0 0 7px transparent; }
+          0%,100% { box-shadow: 0 0 0 0 rgba(229,183,92,.5); }
+          50%      { box-shadow: 0 0 0 8px transparent; }
         }
 
-        /* ── DESKTOP NAV LINKS ── */
+        /* ── DESKTOP LINKS ── */
         .nav-links {
-          display: flex;
-          align-items: center;
-          gap: 2px;
-          list-style: none;
-          margin: 0; padding: 0;
-          flex: 1;
+          display: flex; align-items: center; gap: 2px;
+          list-style: none; margin: 0; padding: 0; flex: 1;
         }
-        .nav-item {
-          position: relative;
-        }
+        .nav-item { position: relative; }
         .nav-a {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          padding: 7px 12px;
-          font-size: 12.5px;
-          font-weight: 500;
-          color: rgba(255,255,255,.65);
-          border-radius: 8px;
-          transition: all .2s;
-          cursor: pointer;
+          display: flex; align-items: center; gap: 4px;
+          padding: 7px 12px; font-size: 12.5px; font-weight: 500;
+          color: rgba(255,255,255,.65); border-radius: 8px;
+          transition: all .2s; cursor: pointer;
           font-family: var(--body, 'DM Sans', sans-serif);
-          white-space: nowrap;
-          user-select: none;
+          white-space: nowrap; user-select: none;
+          background: none; border: none;
         }
-        .nav-item:hover > .nav-a,
-        .nav-item.active > .nav-a {
-          color: var(--text, #fff);
-          background: rgba(255,255,255,.05);
+        .nav-item:hover > .nav-a {
+          color: #F4D06F;
+          background: rgba(229,183,92,.1);
         }
-        .nav-item.active > .nav-a {
-          color: var(--gold, #FFD700) !important;
-          background: rgba(255,215,0,.1) !important;
+        .nav-item.active > .nav-a,
+        .nav-item.open > .nav-a {
+          color: #F4D06F !important;
+          background: rgba(201,151,43,.15) !important;
+          text-shadow: 0 0 12px rgba(244,208,111,.3);
         }
 
         /* ── DROPDOWN ── */
         .nav-drop {
-        position: absolute;
-        top: 100%; /* flush — no gap */
-        left: 50%;
-        transform: translateX(-50%) translateY(-4px);
-        background: #0b0b0e;
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 16px; padding: 10px;
-        min-width: 190px;
-        opacity: 0; visibility: hidden; pointer-events: none;
-        /* hide with 200ms delay so cursor can travel to dropdown */
-        transition: opacity .15s ease, transform .15s ease, visibility 0s linear .2s;
-        box-shadow: 0 24px 60px rgba(0,0,0,.95), 0 0 0 1px rgba(255,215,0,.05);
-        z-index: 9000;
-}
-        .nav-item::after {
-        content: '';
-        position: absolute;
-        top: 100%; left: -24px; right: -24px;
-        height: 16px; /* fills the gap between label and dropdown */
-        background: transparent;
-}
+          position: absolute; top: 100%; left: 50%;
+          transform: translateX(-50%) translateY(-4px);
+          background: #050505;
+          border: 1px solid rgba(201,151,43,.25);
+          border-radius: 16px; padding: 10px; min-width: 190px;
+          opacity: 0; visibility: hidden; pointer-events: none;
+          transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+          box-shadow: 0 24px 60px rgba(0,0,0,.97), 0 0 0 1px rgba(229,183,92,.04), 0 8px 32px rgba(201,151,43,.08);
+          z-index: 9000;
+        }
         .nav-drop.wide { min-width: 320px; }
         .nav-drop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
-
-        /* Show on hover */
-        .nav-item:hover > .nav-drop {
-        opacity: 1; visibility: visible; pointer-events: all;
-        transform: translateX(-50%) translateY(4px);
-        transition: opacity .15s ease, transform .15s ease, visibility 0s linear 0s;
-}
-
+        .nav-item.open > .nav-drop {
+          opacity: 1; visibility: visible; pointer-events: all;
+          transform: translateX(-50%) translateY(4px);
+          transition: opacity .18s ease, transform .18s ease, visibility 0s linear 0s;
+        }
         .nav-drop a {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 10px;
-          border-radius: 8px;
-          font-size: 12px;
-          color: #888;
-          text-decoration: none;
-          transition: all .16s;
-          font-family: var(--body, 'DM Sans', sans-serif);
+          display: flex; align-items: center; gap: 8px;
+          padding: 8px 10px; border-radius: 8px;
+          font-size: 12px; color: rgba(255,255,255,.55); text-decoration: none;
+          transition: all .16s; font-family: var(--body, 'DM Sans', sans-serif);
         }
-        .nav-drop a:hover { color: #fff; background: rgba(255,215,0,.06); }
+        .nav-drop a:hover {
+          color: #F4D06F;
+          background: rgba(184,134,11,.14);
+        }
         .nav-drop-ic {
-          width: 26px; height: 26px;
-          border-radius: 6px;
-          background: rgba(255,255,255,.04);
+          width: 26px; height: 26px; border-radius: 6px;
+          background: rgba(201,151,43,.08);
           display: flex; align-items: center; justify-content: center;
-          font-size: 12px; flex-shrink: 0;
-          transition: background .16s;
+          font-size: 12px; flex-shrink: 0; transition: background .16s;
         }
-        .nav-drop a:hover .nav-drop-ic { background: var(--gold, #FFD700); }
+        .nav-drop a:hover .nav-drop-ic {
+          background: linear-gradient(135deg, #C9972B, #F4D06F);
+        }
 
         /* ── RIGHT SIDE ── */
-        .nav-r {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin-left: auto;
-          flex-shrink: 0;
-        }
+        .nav-r { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
         .nav-badge {
           display: flex; align-items: center; gap: 6px;
           padding: 5px 10px 5px 8px;
-          background: rgba(0,0,0,.6);
-          border: 1px solid rgba(255,215,0,.3);
-          border-radius: 50px;
-          backdrop-filter: blur(12px);
+          background: rgba(0,0,0,.8);
+          border: 1px solid rgba(201,151,43,.4);
+          border-radius: 50px; backdrop-filter: blur(12px);
           white-space: nowrap; flex-shrink: 0;
           animation: badge-bob 3s ease-in-out infinite;
         }
         @keyframes badge-bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
         .nav-badge-fire { font-size: 14px; }
-        .nav-badge-num  { font-family: var(--disp,'Syne',sans-serif); font-size: 12px; font-weight: 800; color: var(--gold,#FFD700); }
-        .nav-badge-lbl  { font-size: 10px; color: rgba(255,255,255,.55); }
+        .nav-badge-num {
+          font-family: var(--disp,'Syne',sans-serif); font-size: 12px; font-weight: 800;
+          background: linear-gradient(135deg, #E5B75C, #F4D06F);
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .nav-badge-lbl { font-size: 10px; color: rgba(255,255,255,.55); }
 
+        /* CTA button — gold gradient bg, black text */
         .btn-cta {
-          padding: 8px 18px; border-radius: 8px;
+          padding: 8px 20px; border-radius: 8px;
           font-size: 12.5px; font-weight: 700;
-          background: var(--gold,#FFD700); color: #000;
+          background: linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%);
+          color: #000;
           text-decoration: none; transition: all .22s;
-          box-shadow: 0 4px 18px rgba(255,215,0,.28);
+          box-shadow: 0 4px 20px rgba(229,183,92,.3), 0 0 0 1px rgba(244,208,111,.15);
           font-family: var(--body,'DM Sans',sans-serif);
           white-space: nowrap; flex-shrink: 0;
         }
-        .btn-cta:hover { background: #ffe84d; transform: translateY(-1px); }
-
-        /* Small CTA — mobile only */
+        .btn-cta:hover {
+          filter: brightness(1.08);
+          background: linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%);
+          transform: translateY(-1px);
+          box-shadow: 0 6px 28px rgba(229,183,92,.45);
+        }
         .btn-cta-sm {
           display: none;
-          padding: 6px 11px; border-radius: 8px;
+          padding: 6px 12px; border-radius: 8px;
           font-size: 11px; font-weight: 700;
-          background: var(--gold,#FFD700); color: #000;
-          text-decoration: none; white-space: nowrap;
-          flex-shrink: 0;
-          font-family: var(--body,'DM Sans',sans-serif);
-          transition: background .2s;
+          background: linear-gradient(135deg, #C9972B, #F4D06F);
+          color: #000;
+          text-decoration: none; white-space: nowrap; flex-shrink: 0;
+          font-family: var(--body,'DM Sans',sans-serif); transition: all .2s;
+          box-shadow: 0 3px 14px rgba(229,183,92,.25);
         }
-        .btn-cta-sm:hover { background: #ffe84d; }
+        .btn-cta-sm:hover { transform: translateY(-1px); box-shadow: 0 5px 20px rgba(229,183,92,.4); }
 
-        /* ── HAMBURGER ── */
+        /* ── HAMBURGER — gold lines ── */
         .hbg {
-          display: none;
-          flex-direction: column; gap: 5px;
+          display: none; flex-direction: column; gap: 5px;
           cursor: pointer; padding: 8px; margin-left: 8px;
-          flex-shrink: 0; border-radius: 8px;
-          transition: background .2s;
+          flex-shrink: 0; border-radius: 8px; transition: background .2s;
         }
-        .hbg:hover { background: rgba(255,255,255,.07); }
+        .hbg:hover { background: rgba(229,183,92,.1); }
         .hbg span {
           display: block; width: 20px; height: 2px;
-          background: var(--text,#fff); border-radius: 2px;
-          transition: all .3s;
+          background: linear-gradient(90deg, #C9972B, #F4D06F);
+          border-radius: 2px; transition: all .3s;
         }
 
         /* ── MOBILE DRAWER ── */
         .mob-nav {
           position: fixed; inset: 0;
-          background: rgba(0,0,0,.98);
-          z-index: 999;
+          background: #000; z-index: 999;
           display: flex; flex-direction: column;
           padding: 82px clamp(16px,4vw,28px) 40px;
           transform: translateX(100%);
           transition: transform .38s cubic-bezier(.4,0,.2,1);
           overflow-y: auto; overflow-x: hidden;
+          border-left: 1px solid rgba(201,151,43,.2);
         }
         .mob-nav.open { transform: translateX(0); }
 
         /* ── RESPONSIVE ── */
         @media (max-width: 860px) {
-          .nav-links   { display: none !important; }
-          .nav-badge   { display: none !important; }
-          .btn-cta     { display: none !important; }
-          .btn-cta-sm  { display: inline-flex !important; }
-          .hbg         { display: flex !important; }
+          .nav-links  { display: none !important; }
+          .nav-badge  { display: none !important; }
+          .btn-cta    { display: none !important; }
+          .btn-cta-sm { display: inline-flex !important; }
+          .hbg        { display: flex !important; }
           a.nav-logo .nav-logo-text { font-size: 15px; }
           a.nav-logo { margin-right: 0; }
         }
@@ -334,37 +323,64 @@ export default function Navbar() {
       <nav id="nav" className={scrolled ? "scrolled" : ""}>
         <div className="nav-inner">
 
-          {/* Logo */}
+          {/* Logo — full gold */}
           <a href="/" className="nav-logo">
             <BrandLogo />
-            <div className="nav-logo-text">
-              Avenue <em>Marketing Agency</em>
-            </div>
+            <div className="nav-logo-text">Aarvix Digital Marketing</div>
             <div className="nav-logo-dot" />
           </a>
 
           {/* Desktop links */}
-          <ul className="nav-links">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.label} className={`nav-item${isActive(item) ? " active" : ""}`}>
-                <span className="nav-a">
-                  {item.label} <ChevronDown />
-                </span>
+          <ul className="nav-links" ref={navRef}>
+            {/* Home — standalone, no dropdown */}
+            <li>
+              <a
+                href="/"
+                style={{
+                  display: "flex", alignItems: "center", gap: 4,
+                  padding: "7px 12px", fontSize: 12.5, fontWeight: 500,
+                  color: pathname === "/" ? "#F4D06F" : "rgba(218,165,32,.7)",
+                  background: pathname === "/" ? "rgba(201,151,43,.15)" : "transparent",
+                  borderRadius: 8, textDecoration: "none",
+                  transition: "all .2s", fontFamily: "var(--body,'DM Sans',sans-serif)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                🏠 Home
+              </a>
+            </li>
+
+            {NAV_ITEMS.map((item, i) => (
+              <li
+                key={item.label}
+                className={[
+                  "nav-item",
+                  isActive(item) ? "active" : "",
+                  openIndex === i ? "open" : "",
+                ].filter(Boolean).join(" ")}
+              >
+                {/* Click heading to toggle — stays open until clicked again */}
+                <button
+                  className="nav-a"
+                  onClick={() => toggleDesktop(i)}
+                  aria-expanded={openIndex === i}
+                >
+                  {item.label} <ChevronDown open={openIndex === i} />
+                </button>
+
                 <div className={`nav-drop${item.wide ? " wide" : ""}`}>
                   {item.wide ? (
                     <div className="nav-drop-grid">
                       {item.links.map((link) => (
-                        <a key={link.text} href={link.href}>
-                          <span className="nav-drop-ic">{link.icon}</span>
-                          {link.text}
+                        <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
+                          <span className="nav-drop-ic">{link.icon}</span>{link.text}
                         </a>
                       ))}
                     </div>
                   ) : (
                     item.links.map((link) => (
-                      <a key={link.text} href={link.href}>
-                        <span className="nav-drop-ic">{link.icon}</span>
-                        {link.text}
+                      <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
+                        <span className="nav-drop-ic">{link.icon}</span>{link.text}
                       </a>
                     ))
                   )}
@@ -396,17 +412,33 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       <div className={`mob-nav${mobOpen ? " open" : ""}`}>
+
+        {/* Home */}
+        <div style={{ borderBottom: "1px solid rgba(184,134,11,.2)" }}>
+          <a
+            href="/"
+            onClick={() => setMobOpen(false)}
+            style={{
+              display: "flex", alignItems: "center", gap: 10,
+              padding: "14px 0", textDecoration: "none",
+              fontFamily: "var(--disp,'Syne',sans-serif)",
+              fontSize: 17, fontWeight: 700,
+              color: pathname === "/" ? "#F4D06F" : "rgba(218,165,32,.8)",
+            }}
+          >
+            🏠 Home
+          </a>
+        </div>
+
         {NAV_ITEMS.map((item, i) => (
-          <div key={item.label} style={{ borderBottom: "1px solid #111" }}>
+          <div key={item.label} style={{ borderBottom: "1px solid rgba(184,134,11,.2)" }}>
             <button
               onClick={() => setOpenIndex(prev => prev === i ? null : i)}
               style={{
                 width: "100%", background: "none", border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                fontFamily: "var(--disp,'Syne',sans-serif)",
-                fontSize: 17, fontWeight: 700,
-                color: isActive(item) ? "var(--gold,#FFD700)" : "#fff",
-                padding: "14px 0",
+                fontFamily: "var(--disp,'Syne',sans-serif)", fontSize: 17, fontWeight: 700,
+                color: isActive(item) ? "#F4D06F" : "rgba(218,165,32,.8)", padding: "14px 0",
               }}
             >
               {item.label}
@@ -426,8 +458,7 @@ export default function Navbar() {
                       color: "rgba(255,255,255,.65)", borderRadius: 8, textDecoration: "none",
                     }}
                   >
-                    <span style={{ fontSize: 16 }}>{link.icon}</span>
-                    {link.text}
+                    <span style={{ fontSize: 16 }}>{link.icon}</span>{link.text}
                   </a>
                 ))}
               </div>
@@ -440,11 +471,12 @@ export default function Navbar() {
             href="/contact"
             onClick={() => setMobOpen(false)}
             style={{
-              display: "block", textAlign: "center",
-              padding: "14px", borderRadius: 999,
-              background: "var(--gold,#FFD700)", color: "#000",
+              display: "block", textAlign: "center", padding: "14px", borderRadius: 999,
+              background: "linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%)",
+              color: "#000",
               fontWeight: 800, fontSize: 15, textDecoration: "none",
               fontFamily: "var(--disp,'Syne',sans-serif)",
+              boxShadow: "0 4px 20px rgba(229,183,92,.3)",
             }}
           >
             Talk to Us →
