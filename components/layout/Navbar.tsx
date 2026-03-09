@@ -32,16 +32,17 @@ const NAV_ITEMS: NavItem[] = [
     type: "dropdown",
     label: "Top Creators",
     links: [
-      { icon: "😄", text: "Comedy",    href: "/for-creators" },
-      { icon: "💰", text: "Finance",   href: "/for-creators" },
-      { icon: "👶", text: "Parenting", href: "/for-creators" },
-      { icon: "💄", text: "Beauty",    href: "/for-creators" },
-      { icon: "👗", text: "Fashion",   href: "/for-creators" },
-      { icon: "💪", text: "Fitness",   href: "/for-creators" },
-      { icon: "🍕", text: "Food",      href: "/for-creators" },
-      { icon: "🎮", text: "Gaming",    href: "/for-creators" },
-      { icon: "📱", text: "Tech",      href: "/for-creators" },
-      { icon: "✈️", text: "Travel",    href: "/for-creators" },
+      { icon: "⭐", text: "Creators",  href: "/for-creators" },
+      { icon: "😄", text: "Comedy",    href: "/for-creators?category=comedy" },
+      { icon: "💰", text: "Finance",   href: "/for-creators?category=finance" },
+      { icon: "👶", text: "Parenting", href: "/for-creators?category=parenting" },
+      { icon: "💄", text: "Beauty",    href: "/for-creators?category=beauty" },
+      { icon: "👗", text: "Fashion",   href: "/for-creators?category=fashion" },
+      { icon: "💪", text: "Fitness",   href: "/for-creators?category=fitness" },
+      { icon: "🍕", text: "Food",      href: "/for-creators?category=food" },
+      { icon: "🎮", text: "Gaming",    href: "/for-creators?category=gaming" },
+      { icon: "📱", text: "Tech",      href: "/for-creators?category=tech" },
+      { icon: "✈️", text: "Travel",    href: "/for-creators?category=travel" },
     ],
     wide: true,
     matchPaths: ["/for-creators"],
@@ -58,12 +59,8 @@ const NAV_ITEMS: NavItem[] = [
     type: "dropdown",
     label: "Our Work",
     links: [
-      { icon: "📊", text: "Dashboard",          href: "/platform#products" },
-      { icon: "💲", text: "Fair Price Index",   href: "/platform#products" },
-      { icon: "🎯", text: "Competitor Tracker", href: "/platform#products" },
-      { icon: "📁", text: "Case Studies",       href: "/platform#work" },
-      { icon: "✍️", text: "Blog",              href: "/platform#blog" },
-      { icon: "📖", text: "Guides",            href: "/platform#guides" },
+      { icon: "📁", text: "Campaigns",          href: "/platform#work" },
+      { icon: "✍️", text: "Blogs",             href: "/platform#blog" },
     ],
     matchPaths: ["/platform"],
   },
@@ -79,7 +76,6 @@ const NAV_ITEMS: NavItem[] = [
     links: [
       { icon: "👥", text: "Meet the Team", href: "/team" },
       { icon: "🚀", text: "Join Us",       href: "/contact" },
-      { icon: "📞", text: "Talk to Sales", href: "/contact" },
     ],
     matchPaths: ["/contact", "/team"],
   },
@@ -396,8 +392,8 @@ export default function Navbar() {
                 <div className="nav-badge-lbl">Creators</div>
               </div>
             </div>
-            <a href="/contact" className="btn-cta">Talk to Us</a>
-            <a href="/contact" className="btn-cta-sm">Talk to Us</a>
+            <a href="/contact" className="btn-cta">Join Us</a>
+            <a href="/contact" className="btn-cta-sm">Join Us</a>
 
             <div className="hbg" onClick={() => setMobOpen(p => !p)} aria-label="Toggle menu">
               <span style={mobOpen ? { transform: "rotate(45deg) translate(5px,5px)" } : {}} />
@@ -475,7 +471,7 @@ export default function Navbar() {
               boxShadow: "0 4px 20px rgba(229,183,92,.3)",
             }}
           >
-            Talk to Us →
+            Join Us →
           </a>
         </div>
       </div>

@@ -9,7 +9,7 @@ import CampaignModal from "@/components/ui/CampaignModal";
 const SECTIONS = ["work", "blog"] as const;
 
 export default function PlatformPage() {
-  const [active, setActive] = useState<(typeof SECTIONS)[number]>("products");
+  const [active, setActive] = useState<(typeof SECTIONS)[number]>("work");
   const [activeCampaignId, setActiveCampaignId] = useState<string | null>(null);
   const [openBlog, setOpenBlog] = useState<BlogPost | null>(null);
 
@@ -176,32 +176,6 @@ export default function PlatformPage() {
                   </div>
                 </button>
               ))}
-            </div>
-          </section>
-
-          <section id="guides" className="reveal">
-            <span className="stag">Guides</span>
-            <h2 className="sh">Learn Influencer Marketing</h2>
-            <span className="gold-bar" />
-            <div className="guide-grid">
-              <div className="guide-card blue">
-                <div className="guide-emoji">📘</div>
-                <h3>Beginner&apos;s Guide to Influencer Marketing</h3>
-                <p>Everything a brand needs before their first campaign.</p>
-                <a href="/contact" className="btn btn-y">→Contact Us</a>
-              </div>
-              <div className="guide-card green">
-                <div className="guide-emoji">📗</div>
-                <h3>The Complete Creator Brief Template</h3>
-                <p>Get 3x better content with this step-by-step template.</p>
-                <a href="/contact" className="btn btn-y">Know from Us</a>
-              </div>
-              <div className="guide-card orange">
-                <div className="guide-emoji">📙</div>
-                <h3>ROI Measurement Playbook</h3>
-                <p>Track and report ROI in a way your CFO will love.</p>
-                <a href="/contact" className="btn btn-y">Call Us</a>
-              </div>
             </div>
           </section>
         </div>

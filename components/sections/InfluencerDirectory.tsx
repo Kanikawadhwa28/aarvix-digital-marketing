@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { creators } from "@/data/creators";
 
 const CATEGORY_TABS = ["Comedy", "Finance", "Parenting", "Beauty", "Fashion", "Fitness", "Food", "Gaming", "Tech", "Travel"] as const;
@@ -13,6 +14,7 @@ type Card = {
   followers: string;
   emoji: string;
   bg: string;
+  image?: string;
 };
 
 const comedyCards: Card[] = creators.map((c) => ({
@@ -21,6 +23,7 @@ const comedyCards: Card[] = creators.map((c) => ({
   followers: c.audience,
   emoji: c.emoji,
   bg: c.bg,
+  image: c.image,
 }));
 
 const placeholder = (category: Category, baseEmoji: string): Card[] => [
@@ -44,7 +47,21 @@ const CATEGORY_MAP: Record<Category, Card[]> = {
 };
 
 export default function InfluencerDirectory() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category");
+
+  const normalizedFromQuery = categoryParam
+    ? (categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1).toLowerCase())
+    : null;
+
   const [active, setActive] = useState<Category>("Comedy");
+
+  useEffect(() => {
+    if (!normalizedFromQuery) return;
+    if (CATEGORY_TABS.includes(normalizedFromQuery as Category)) {
+      setActive(normalizedFromQuery as Category);
+    }
+  }, [normalizedFromQuery]);
 
   const cards = CATEGORY_MAP[active] ?? [];
 
@@ -124,20 +141,34 @@ export default function InfluencerDirectory() {
 
                 <div
                   className="icard-img"
-                  style={{ background: `linear-gradient(135deg,${inf.bg},#0d0d0d)`, position: "relative", overflow: "hidden" }}
+                  style={{
+                    background: inf.image
+                      ? "#000"
+                      : `linear-gradient(135deg,${inf.bg},#0d0d0d)`,
+                    backgroundImage: inf.image
+                      ? `url(/images/creators/${inf.image})`
+                      : undefined,
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    position: "relative",
+                    overflow: "hidden",
+                  }}
                 >
-                  <span
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 48,
-                    }}
-                  >
-                    {inf.emoji}
-                  </span>
+                  {!inf.image && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 48,
+                      }}
+                    >
+                      {inf.emoji}
+                    </span>
+                  )}
                 </div>
 
                 <div className="icard-ov">
