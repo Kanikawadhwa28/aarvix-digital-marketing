@@ -7,7 +7,6 @@ const TICKER_WORDS = [
   "7,50,000+ Creators",
   "500+ Brand Campaigns",
   "10B+ Total Reach",
-  "India's #1 Platform",
   "Fair Price Index",
   "Competitor Tracking",
   "End-to-End Campaigns",

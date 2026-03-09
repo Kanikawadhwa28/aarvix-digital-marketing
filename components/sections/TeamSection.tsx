@@ -9,7 +9,7 @@ export default function TeamSection() {
         <span className="stag">Meet the Team</span>
         <h2 className="sh">Built by Strategists Who Understand <em>Both Sides</em></h2>
         <p className="ssub" style={{ margin: "10px auto 0" }}>
-          The team behind Avenue Marketing Agency — India&apos;s most trusted influencer marketing platform
+          The team behind Aarvix Digital Marketing — a trusted influencer marketing partner
         </p>
       </div>
       <TeamCards size="large" />

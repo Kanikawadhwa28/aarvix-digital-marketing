@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { creators } from "@/data/creators";
 import PageHero from "@/components/ui/PageHero";
 import StepCards, { Step } from "@/components/ui/StepCards";
+import InfluencerDirectory from "@/components/sections/InfluencerDirectory";
 
 const HERO_BADGES = ["Free to Join", "Get Paid on Time", "Top Brand Deals"];
 
@@ -15,15 +14,13 @@ const CREATOR_STEPS: Step[] = [
 ];
 
 export default function ForCreatorsPage() {
-  const [showAll, setShowAll] = useState(false);
-  const visibleCreators = showAll ? creators : creators.slice(0, 8);
 
   return (
     <>
       <PageHero
         tag="For Creators"
         h1="Get Discovered. Get Paid. Grow Faster."
-        subtitle="Join 7,50,000+ verified creators already earning with India's top brands on Avenue Marketing Agency."
+        subtitle="We have access to 7,50,000 creators already collaborating with India&apos;s top brands."
         buttons={[]}
       />
 
@@ -40,92 +37,17 @@ export default function ForCreatorsPage() {
       <section className="reveal">
         <div className="tc" style={{ marginBottom: 26 }}>
           <span className="stag">Community</span>
-          <h2 className="sh">Creators Already on <em>Avenue Marketing Agency</em></h2>
-          <p className="ssub" style={{ margin: "10px auto 0" }}>Hover any card to see their stats.</p>
+          <h2 className="sh">Creators Already in the <em>Aarvix Digital Marketing</em> Network</h2>
+          <p className="ssub" style={{ margin: "10px auto 0" }}>Explore top creators by category.</p>
           <span className="gold-bar" />
         </div>
-
-        <div className="creator-grid-page">
-          {visibleCreators.map((c) => (
-            <div key={c.name} className="icard">
-              <div className="icard-photo">
-                <div
-                  className="icard-img"
-                  style={{ background: `linear-gradient(135deg,${c.bg},#0d0d0d)`, position: "relative" }}
-                >
-                  {c.image ? (
-                    <img
-                      src={`/images/creators/${c.image}`}
-                      alt={c.name}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = "none";
-                        const fallback = target.nextElementSibling as HTMLElement;
-                        if (fallback) fallback.style.display = "flex";
-                      }}
-                    />
-                  ) : null}
-                  <span
-                    style={{
-                      display: c.image ? "none" : "flex",
-                      alignItems: "center", justifyContent: "center",
-                      width: "100%", height: "100%", fontSize: 48,
-                    }}
-                  >
-                    {c.emoji}
-                  </span>
-                </div>
-
-                {/* Hover overlay */}
-                <div className="icard-ov">
-                  <div className="ov-f">{c.audience}</div>
-                  <div className="ov-er">Audience across Instagram & YouTube</div>
-                  <div className="ov-plats">
-                    <span className="plat ig">📸 Instagram</span>
-                    <span className="plat yt">▶ YouTube</span>
-                  </div>
-                  {c.instagram ? (
-                    <a
-                      href={c.instagram}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="ov-cta"
-                      style={{ textDecoration: "none" }}
-                    >
-                      View Profile →
-                    </a>
-                  ) : (
-                    <span className="ov-cta">View Profile →</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="icard-info">
-                <div className="icard-name">{c.name}</div>
-                <div className="icard-meta">
-                  <span>{c.audience} audience</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ textAlign: "center", marginTop: 32 }}>
-          <button
-            type="button"
-            className="btn btn-o"
-            onClick={() => setShowAll((v) => !v)}
-          >
-            {showAll ? "Show Less ↑" : "Load More ↓"}
-          </button>
-        </div>
+        <InfluencerDirectory />
       </section>
 
       <section className="reveal">
         <div className="tc" style={{ marginBottom: 32 }}>
-          <span className="stag">Why Avenue</span>
-          <h2 className="sh">Why Creators Choose <em>Avenue Marketing Agency</em></h2>
+          <span className="stag">Why Aarvix</span>
+          <h2 className="sh">Why Creators Choose <em>Aarvix Digital Marketing</em></h2>
           <span className="gold-bar" />
         </div>
         <div className="benefit-grid">

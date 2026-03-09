@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 
 const TESTIMONIALS = [
-  { quote: "Avenue Marketing Agency's Fair Price Index saved us ₹18L on our first campaign. We now have full pricing transparency and our ROI has more than doubled.", result: "🔥 2x ROI Achieved", name: "Priya Sharma", role: "Head of Marketing, Navi", avatarLetter: "P", avatarBg: "linear-gradient(135deg,#FFD700,#ff8c00)" },
+  { quote: "Aarvix Digital Marketing's Fair Price Index saved us ₹18L on our first campaign. We now have full pricing transparency and our ROI has more than doubled.", result: "🔥 2x ROI Achieved", name: "Priya Sharma", role: "Head of Marketing, Navi", avatarLetter: "P", avatarBg: "linear-gradient(135deg,#FFD700,#ff8c00)" },
   { quote: "The competitor tracking feature is a game-changer. We discovered creators our competitors were using — and we onboarded them before their next campaign launched.", result: "🎯 3x Share of Voice", name: "Rahul Mehta", role: "CMO, Samsonite India", avatarLetter: "R", avatarBg: "linear-gradient(135deg,#4a90d9,#1565c0)" },
   { quote: "Coordinating 500+ gaming creators was seamlessly managed on the platform. Real-time tracking let us optimise mid-campaign and smash every single KPI.", result: "⚡ 15M Engagements", name: "Amit Kumar", role: "Growth Lead, BGMI", avatarLetter: "A", avatarBg: "linear-gradient(135deg,#66BB6A,#2e7d32)" },
-  { quote: "12 nano-influencers found through Avenue Marketing Agency each drove 5x better conversion than mega-influencers we were paying 20x more for. The data doesn't lie.", result: "📈 5x Conversion Rate", name: "Sneha Agarwal", role: "D2C Lead, Mamaearth", avatarLetter: "S", avatarBg: "linear-gradient(135deg,#f06292,#ad1457)" },
+  { quote: "12 nano-influencers found through Aarvix Digital Marketing each drove 5x better conversion than mega-influencers we were paying 20x more for. The data doesn't lie.", result: "📈 5x Conversion Rate", name: "Sneha Agarwal", role: "D2C Lead, Mamaearth", avatarLetter: "S", avatarBg: "linear-gradient(135deg,#f06292,#ad1457)" },
   { quote: "Samsung Galaxy launch hit 22M reach in 10 days. Best performance numbers we've ever seen — and the reporting dashboard made presenting to leadership effortless.", result: "📱 22M Reach, 10 Days", name: "Kiran Joshi", role: "Marketing Director, Samsung India", avatarLetter: "K", avatarBg: "linear-gradient(135deg,#29b6f6,#0277bd)" },
 ];
 

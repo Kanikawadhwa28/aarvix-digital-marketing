@@ -40,7 +40,7 @@ const FOOTER_COLS = [
   },
 ];
 
-const TERMS_TEXT = `All proprietary brand identifiers, creator-originated intellectual assets, and campaign-specific material disseminated across the digital infrastructure of this platform shall unequivocally remain under the exclusive proprietorial dominion of their respectively designated originating entities — Avenue Marketing Agency hereby categorically disclaims any assertion of ownership, co-ownership, or affiliated rights over any third-party intellectual property showcased, referenced, or otherwise represented herein. The brands, creators, and associated campaign executions exhibited hereinabove collectively encompass entities with whom Avenue Marketing Agency has engaged in direct, indirect, circumstantial, or prospectively anticipated collaborative undertakings, inclusive of those currently traversing the formalised onboarding continuum in anticipation of forthcoming strategic and commercial partnerships. The deliberate curation and public dissemination of said content serves an exclusively amplificatory purpose — specifically, the systematic augmentation of socio-digital visibility, the optimisation of deal-acquisition probability, and the facilitation of expansive, mutually beneficial professional network proliferation — with unconditional and unambiguous attribution ceremoniously accorded to all featured proprietorial parties without exception. Avenue Marketing Agency unwaveringly conducts the totality of its operational, commercial, and interpersonal engagements in strict accordance with an inviolable institutional ethos predicated upon trust, radical transparency, and scrupulous conscientious adherence to the intellectual, creative, and contractual rights and entitlements of every collaborating, affiliated, or prospectively associated entity. Should any disputes, apprehensions, or contentions materialise with respect to the representation, utilisation, or contextualisation of any featured content, brand identity, or creator-associated intellectual property, the immediate initiation of formal correspondence addressed to avenueteamofficial@gmail.com shall be received with the utmost urgency and resolved with uncompromising expedience and demonstrable good faith.`;
+const TERMS_TEXT = `All proprietary brand identifiers, creator-originated intellectual assets, and campaign-specific material disseminated across the digital infrastructure of this platform shall unequivocally remain under the exclusive proprietorial dominion of their respectively designated originating entities — Aarvix Digital Marketing hereby categorically disclaims any assertion of ownership, co-ownership, or affiliated rights over any third-party intellectual property showcased, referenced, or otherwise represented herein. The brands, creators, and associated campaign executions exhibited hereinabove collectively encompass entities with whom Aarvix Digital Marketing has engaged in direct, indirect, circumstantial, or prospectively anticipated collaborative undertakings, inclusive of those currently traversing the formalised onboarding continuum in anticipation of forthcoming strategic and commercial partnerships. The deliberate curation and public dissemination of said content serves an exclusively amplificatory purpose — specifically, the systematic augmentation of socio-digital visibility, the optimisation of deal-acquisition probability, and the facilitation of expansive, mutually beneficial professional network proliferation — with unconditional and unambiguous attribution ceremoniously accorded to all featured proprietorial parties without exception. Aarvix Digital Marketing unwaveringly conducts the totality of its operational, commercial, and interpersonal engagements in strict accordance with an inviolable institutional ethos predicated upon trust, radical transparency, and scrupulous conscientious adherence to the intellectual, creative, and contractual rights and entitlements of every collaborating, affiliated, or prospectively associated entity. Should any disputes, apprehensions, or contentions materialise with respect to the representation, utilisation, or contextualisation of any featured content, brand identity, or creator-associated intellectual property, the immediate initiation of formal correspondence addressed to avenueteamofficial@gmail.com shall be received with the utmost urgency and resolved with uncompromising expedience and demonstrable good faith.`;
 
 export default function Footer() {
   const pathname = usePathname();
@@ -50,7 +50,7 @@ export default function Footer() {
 
   const getHref = (link: string, colTitle: string) => {
     if (colTitle === "Top Niches") return "/#top-creators";
-    if (link === "About Us") return "/contact";
+    if (link === "About Us") return "/about";
     if (link === "Our Team") return "/team";
     if (link === "For Brands") return "/for-brands";
     if (link === "For Creators") return "/for-creators";
@@ -96,10 +96,10 @@ export default function Footer() {
         {/* Brand column */}
         <div className="ft-brand">
           <h4>
-            Avenue Marketing <em>Agency</em>
+            Aarvix Digital <em>Marketing</em>
           </h4>
           <p>
-            Avenue Marketing Agency connects 7,50,000+ creators with brands that demand real ROI and
+            Aarvix Digital Marketing connects 7,50,000+ creators with brands that demand real ROI and
             meaningful barter collaborations — powered by data, run by experts.
           </p>
           <div className="socials">
@@ -130,7 +130,7 @@ export default function Footer() {
       </div>
 
       <div className="ft-bot">
-        <p>© 2026 Avenue Marketing Agency. All rights reserved.</p>
+        <p>© 2026 Aarvix Digital Marketing. All rights reserved.</p>
         <div className="ft-bot-links">
           <a href="#">Privacy</a>
           <a href="#" onClick={handleTermsClick}>Terms</a>

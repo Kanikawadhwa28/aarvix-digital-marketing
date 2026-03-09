@@ -6,7 +6,7 @@ export default function BrandLogo() {
     <div className="brand-logo">
       <img
         src="/images/logo/logo.png"
-        alt="Avenue Marketing Agency"
+        alt="Aarvix Digital Marketing"
         onError={(e) => {
           const t = e.target as HTMLImageElement;
           if (!t.dataset.fallback) {

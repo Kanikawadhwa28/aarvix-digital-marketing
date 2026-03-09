@@ -17,7 +17,7 @@ export default function NewsletterSection() {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          _subject: "Newsletter Subscribe — Avenue Marketing Agency",
+          _subject: "Newsletter Subscribe — Aarvix Digital Marketing",
           message: "Someone visited the website and clicked Subscribe on the newsletter section.",
           _captcha: "false",
           _template: "table",

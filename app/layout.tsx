@@ -6,8 +6,8 @@ import ClientProviders from "@/components/ClientProviders";
 import BackToTop from "@/components/ui/BackToTop";
 
 export const metadata: Metadata = {
-  title: "Avenue Marketing Agency — India's #1 Influencer & Barter Collaboration Agency",
-  description: "Avenue Marketing Agency connects brands with 7,50,000+ verified influencers for high-ROI and barter collaborations.",
+  title: "Aarvix Digital Marketing — Influencer & Barter Collaboration Agency",
+  description: "Aarvix Digital Marketing connects brands with access to 7,50,000 creators for high-ROI and barter collaborations.",
 };
 
 export default function RootLayout({

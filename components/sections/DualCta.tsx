@@ -10,7 +10,7 @@ export default function DualCta() {
       <div className="dp dp-creators">
         <span className="dp-icon">🌟</span>
         <h3>Are You a Creator?</h3>
-        <p>Join 7,50,000+ influencers. Get discovered by India&apos;s biggest brands, access exclusive campaigns, and get paid — on time, every time.</p>
+        <p>We have access to 7,50,000 creators. Get discovered by India&apos;s biggest brands, access exclusive campaigns, and get paid — on time, every time.</p>
         <a href="/for-creators" className="btn btn-o">JOIN AS A CREATOR →</a>
       </div>
     </div>

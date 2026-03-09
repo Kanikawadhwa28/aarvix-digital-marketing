@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const FAQS = [
   {
-    q: "What exactly does Avenue Marketing Agency do?",
+    q: "What exactly does Aarvix Digital Marketing do?",
     a: "We connect brands with the right creators for influencer marketing campaigns. Think of us as the bridge so we understand what a brand needs, find creators who genuinely fit, and make the collaboration happen. Simple, human, effective.",
   },
   {

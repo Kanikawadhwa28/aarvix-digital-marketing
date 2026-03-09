@@ -7,7 +7,7 @@ import { campaigns, type Campaign } from "@/data/campaigns";
 import PageHero from "@/components/ui/PageHero";
 import StepCards, { Step } from "@/components/ui/StepCards";
 
-const HERO_BADGES = ["2.3x Avg ROI", "7,50,000+ Creators", "500+ Campaigns"];
+const HERO_BADGES = ["2.3x Avg ROI", "Access to 7,50,000 Creators", "500+ Campaigns"];
 
 const STEPS: Step[] = [
   { num: "01", icon: "📋", title: "Share Your Brief", desc: "Tell us goals, audience, budget and timeline." },
@@ -196,7 +196,7 @@ export default function ForBrandsPage() {
       <PageHero
         tag="For Brands"
         h1="Run Campaigns That Actually Drive ROI"
-        subtitle="Stop guessing. Start measuring. Connect with 7,50,000+ verified creators on India's most data-driven influencer marketing platform."
+        subtitle="Stop guessing. Start measuring. We have access to 7,50,000 creators on India&apos;s most data-driven influencer marketing platform."
         buttons={[
           { label: "Start Free →", href: "#", variant: "gold" },
           { label: "Talk to Sales →", href: "/contact", variant: "outline" },
@@ -300,7 +300,7 @@ export default function ForBrandsPage() {
           color: "var(--muted,#555)", maxWidth: 640,
           marginLeft: "auto", marginRight: "auto", lineHeight: 1.6,
         }}>
-          * All proprietary content, intellectual assets, and brand identifiers showcased hereinabove remain the exclusive intellectual property of their respective proprietorial entities. Avenue Marketing Agency curates and disseminates said campaigns solely for the purposes of amplifying socio-digital visibility and exemplifying superlative influencer-driven marketing executions.
+          * All proprietary content, intellectual assets, and brand identifiers showcased hereinabove remain the exclusive intellectual property of their respective proprietorial entities. Aarvix Digital Marketing curates and disseminates said campaigns solely for the purposes of amplifying socio-digital visibility and exemplifying superlative influencer-driven marketing executions.
         </p>
       </section>
 

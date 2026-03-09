@@ -90,7 +90,7 @@ export default function CreatorNetwork() {
       {/* Section header */}
       <div className="tc" style={{ marginBottom: 40 }}>
         <span className="stag">Creator Network</span>
-        <h2 className="sh">Our <em>Top Creators</em> - Reach Out us to Connect</h2>
+        <h2 className="sh">Our <em>Top Creators</em> - Work with them</h2>
         <p className="ssub" style={{ margin: "10px auto 0" }}>
           A curated network of India&apos;s most influential voices across every niche
         </p>

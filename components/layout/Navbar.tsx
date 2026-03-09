@@ -4,34 +4,50 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import BrandLogo from "@/components/ui/BrandLogo";
 
-const NAV_ITEMS = [
+type NavLinkItem = {
+  type: "link";
+  label: string;
+  href: string;
+  matchPaths: string[];
+};
+
+type NavDropdownItem = {
+  type: "dropdown";
+  label: string;
+  links: { icon: string; text: string; href: string }[];
+  wide?: boolean;
+  matchPaths: string[];
+};
+
+type NavItem = NavLinkItem | NavDropdownItem;
+
+const NAV_ITEMS: NavItem[] = [
   {
-    label: "Top Creators",
-    links: [
-      { icon: "😄", text: "Comedy",    href: "/#top-creators" },
-      { icon: "💰", text: "Finance",   href: "/#top-creators" },
-      { icon: "👶", text: "Parenting", href: "/#top-creators" },
-      { icon: "💄", text: "Beauty",    href: "/#top-creators" },
-      { icon: "👗", text: "Fashion",   href: "/#top-creators" },
-      { icon: "💪", text: "Fitness",   href: "/#top-creators" },
-      { icon: "🍕", text: "Food",      href: "/#top-creators" },
-      { icon: "🎮", text: "Gaming",    href: "/#top-creators" },
-      { icon: "📱", text: "Tech",      href: "/#top-creators" },
-      { icon: "✈️", text: "Travel",    href: "/#top-creators" },
-    ],
-    wide: true,
+    type: "link",
+    label: "Home",
+    href: "/",
     matchPaths: ["/"],
   },
   {
-    label: "For Creators",
+    type: "dropdown",
+    label: "Top Creators",
     links: [
-      { icon: "🌟", text: "Join Community", href: "/for-creators" },
-      { icon: "📣", text: "Live Campaigns", href: "/for-creators" },
-      { icon: "💸", text: "Get Paid",       href: "/for-creators" },
+      { icon: "😄", text: "Comedy",    href: "/for-creators" },
+      { icon: "💰", text: "Finance",   href: "/for-creators" },
+      { icon: "👶", text: "Parenting", href: "/for-creators" },
+      { icon: "💄", text: "Beauty",    href: "/for-creators" },
+      { icon: "👗", text: "Fashion",   href: "/for-creators" },
+      { icon: "💪", text: "Fitness",   href: "/for-creators" },
+      { icon: "🍕", text: "Food",      href: "/for-creators" },
+      { icon: "🎮", text: "Gaming",    href: "/for-creators" },
+      { icon: "📱", text: "Tech",      href: "/for-creators" },
+      { icon: "✈️", text: "Travel",    href: "/for-creators" },
     ],
+    wide: true,
     matchPaths: ["/for-creators"],
   },
   {
+    type: "dropdown",
     label: "For Brands",
     links: [
       { icon: "🏢", text: "Brand Campaigns", href: "/for-brands" },
@@ -39,24 +55,26 @@ const NAV_ITEMS = [
     matchPaths: ["/for-brands"],
   },
   {
-    label: "Products",
+    type: "dropdown",
+    label: "Our Work",
     links: [
       { icon: "📊", text: "Dashboard",          href: "/platform#products" },
       { icon: "💲", text: "Fair Price Index",   href: "/platform#products" },
       { icon: "🎯", text: "Competitor Tracker", href: "/platform#products" },
+      { icon: "📁", text: "Case Studies",       href: "/platform#work" },
+      { icon: "✍️", text: "Blog",              href: "/platform#blog" },
+      { icon: "📖", text: "Guides",            href: "/platform#guides" },
     ],
     matchPaths: ["/platform"],
   },
   {
-    label: "Our Work",
-    links: [
-      { icon: "📁", text: "Case Studies", href: "/platform#work" },
-      { icon: "✍️", text: "Blog",         href: "/platform#blog" },
-      { icon: "📖", text: "Guides",       href: "/platform#guides" },
-    ],
-    matchPaths: ["/platform"],
+    type: "link",
+    label: "About Us",
+    href: "/about",
+    matchPaths: ["/about"],
   },
   {
+    type: "dropdown",
     label: "Contact",
     links: [
       { icon: "👥", text: "Meet the Team", href: "/team" },
@@ -88,10 +106,8 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close drawer + dropdowns on route change
   useEffect(() => { setMobOpen(false); setOpenIndex(null); }, [pathname]);
 
-  // Close desktop dropdown when clicking outside the nav
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
@@ -102,17 +118,15 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const isActive = (item: typeof NAV_ITEMS[0]) =>
+  const isActive = (item: NavItem) =>
     item.matchPaths.some(p => pathname === p || (p !== "/" && pathname.startsWith(p)));
 
-  // Click same heading again → close; click different → open that one
   const toggleDesktop = (i: number) =>
     setOpenIndex(prev => prev === i ? null : i);
 
   return (
     <>
       <style>{`
-        /* ── AARVIX COLOR TOKENS ── */
         :root {
           --aarvix-gold-start: #C9972B;
           --aarvix-gold-mid:   #E5B75C;
@@ -144,7 +158,6 @@ export default function Navbar() {
           grid-template-columns: unset !important;
         }
 
-        /* ── LOGO — gold gradient text ── */
         a.nav-logo {
           display: flex; align-items: center; gap: 9px;
           text-decoration: none; flex-shrink: 0; margin-right: 24px;
@@ -168,7 +181,6 @@ export default function Navbar() {
           50%      { box-shadow: 0 0 0 8px transparent; }
         }
 
-        /* ── DESKTOP LINKS ── */
         .nav-links {
           display: flex; align-items: center; gap: 2px;
           list-style: none; margin: 0; padding: 0; flex: 1;
@@ -194,7 +206,6 @@ export default function Navbar() {
           text-shadow: 0 0 12px rgba(244,208,111,.3);
         }
 
-        /* ── DROPDOWN ── */
         .nav-drop {
           position: absolute; top: 100%; left: 50%;
           transform: translateX(-50%) translateY(-4px);
@@ -233,7 +244,6 @@ export default function Navbar() {
           background: linear-gradient(135deg, #C9972B, #F4D06F);
         }
 
-        /* ── RIGHT SIDE ── */
         .nav-r { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
         .nav-badge {
           display: flex; align-items: center; gap: 6px;
@@ -253,7 +263,6 @@ export default function Navbar() {
         }
         .nav-badge-lbl { font-size: 10px; color: rgba(255,255,255,.55); }
 
-        /* CTA button — gold gradient bg, black text */
         .btn-cta {
           padding: 8px 20px; border-radius: 8px;
           font-size: 12.5px; font-weight: 700;
@@ -266,7 +275,6 @@ export default function Navbar() {
         }
         .btn-cta:hover {
           filter: brightness(1.08);
-          background: linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%);
           transform: translateY(-1px);
           box-shadow: 0 6px 28px rgba(229,183,92,.45);
         }
@@ -282,7 +290,6 @@ export default function Navbar() {
         }
         .btn-cta-sm:hover { transform: translateY(-1px); box-shadow: 0 5px 20px rgba(229,183,92,.4); }
 
-        /* ── HAMBURGER — gold lines ── */
         .hbg {
           display: none; flex-direction: column; gap: 5px;
           cursor: pointer; padding: 8px; margin-left: 8px;
@@ -295,7 +302,6 @@ export default function Navbar() {
           border-radius: 2px; transition: all .3s;
         }
 
-        /* ── MOBILE DRAWER ── */
         .mob-nav {
           position: fixed; inset: 0;
           background: #000; z-index: 999;
@@ -308,7 +314,6 @@ export default function Navbar() {
         }
         .mob-nav.open { transform: translateX(0); }
 
-        /* ── RESPONSIVE ── */
         @media (max-width: 860px) {
           .nav-links  { display: none !important; }
           .nav-badge  { display: none !important; }
@@ -323,33 +328,13 @@ export default function Navbar() {
       <nav id="nav" className={scrolled ? "scrolled" : ""}>
         <div className="nav-inner">
 
-          {/* Logo — full gold */}
           <a href="/" className="nav-logo">
             <BrandLogo />
             <div className="nav-logo-text">Aarvix Digital Marketing</div>
             <div className="nav-logo-dot" />
           </a>
 
-          {/* Desktop links */}
           <ul className="nav-links" ref={navRef}>
-            {/* Home — standalone, no dropdown */}
-            <li>
-              <a
-                href="/"
-                style={{
-                  display: "flex", alignItems: "center", gap: 4,
-                  padding: "7px 12px", fontSize: 12.5, fontWeight: 500,
-                  color: pathname === "/" ? "#F4D06F" : "rgba(218,165,32,.7)",
-                  background: pathname === "/" ? "rgba(201,151,43,.15)" : "transparent",
-                  borderRadius: 8, textDecoration: "none",
-                  transition: "all .2s", fontFamily: "var(--body,'DM Sans',sans-serif)",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                🏠 Home
-              </a>
-            </li>
-
             {NAV_ITEMS.map((item, i) => (
               <li
                 key={item.label}
@@ -359,37 +344,50 @@ export default function Navbar() {
                   openIndex === i ? "open" : "",
                 ].filter(Boolean).join(" ")}
               >
-                {/* Click heading to toggle — stays open until clicked again */}
-                <button
-                  className="nav-a"
-                  onClick={() => toggleDesktop(i)}
-                  aria-expanded={openIndex === i}
-                >
-                  {item.label} <ChevronDown open={openIndex === i} />
-                </button>
+                {item.type === "link" ? (
+                  <a
+                    href={item.href}
+                    className="nav-a"
+                    style={{
+                      color: pathname === item.href ? "#F4D06F" : undefined,
+                      background: pathname === item.href ? "rgba(201,151,43,.15)" : undefined,
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <>
+                    <button
+                      className="nav-a"
+                      onClick={() => toggleDesktop(i)}
+                      aria-expanded={openIndex === i}
+                    >
+                      {item.label} <ChevronDown open={openIndex === i} />
+                    </button>
 
-                <div className={`nav-drop${item.wide ? " wide" : ""}`}>
-                  {item.wide ? (
-                    <div className="nav-drop-grid">
-                      {item.links.map((link) => (
-                        <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
-                          <span className="nav-drop-ic">{link.icon}</span>{link.text}
-                        </a>
-                      ))}
+                    <div className={`nav-drop${item.wide ? " wide" : ""}`}>
+                      {item.wide ? (
+                        <div className="nav-drop-grid">
+                          {item.links.map((link) => (
+                            <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
+                              <span className="nav-drop-ic">{link.icon}</span>{link.text}
+                            </a>
+                          ))}
+                        </div>
+                      ) : (
+                        item.links.map((link) => (
+                          <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
+                            <span className="nav-drop-ic">{link.icon}</span>{link.text}
+                          </a>
+                        ))
+                      )}
                     </div>
-                  ) : (
-                    item.links.map((link) => (
-                      <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
-                        <span className="nav-drop-ic">{link.icon}</span>{link.text}
-                      </a>
-                    ))
-                  )}
-                </div>
+                  </>
+                )}
               </li>
             ))}
           </ul>
 
-          {/* Right side */}
           <div className="nav-r">
             <div className="nav-badge">
               <span className="nav-badge-fire">🔥</span>
@@ -410,58 +408,56 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile drawer */}
       <div className={`mob-nav${mobOpen ? " open" : ""}`}>
-
-        {/* Home */}
-        <div style={{ borderBottom: "1px solid rgba(184,134,11,.2)" }}>
-          <a
-            href="/"
-            onClick={() => setMobOpen(false)}
-            style={{
-              display: "flex", alignItems: "center", gap: 10,
-              padding: "14px 0", textDecoration: "none",
-              fontFamily: "var(--disp,'Syne',sans-serif)",
-              fontSize: 17, fontWeight: 700,
-              color: pathname === "/" ? "#F4D06F" : "rgba(218,165,32,.8)",
-            }}
-          >
-            🏠 Home
-          </a>
-        </div>
-
         {NAV_ITEMS.map((item, i) => (
           <div key={item.label} style={{ borderBottom: "1px solid rgba(184,134,11,.2)" }}>
-            <button
-              onClick={() => setOpenIndex(prev => prev === i ? null : i)}
-              style={{
-                width: "100%", background: "none", border: "none", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                fontFamily: "var(--disp,'Syne',sans-serif)", fontSize: 17, fontWeight: 700,
-                color: isActive(item) ? "#F4D06F" : "rgba(218,165,32,.8)", padding: "14px 0",
-              }}
-            >
-              {item.label}
-              <ChevronDown open={openIndex === i} />
-            </button>
+            {item.type === "link" ? (
+              <a
+                href={item.href}
+                onClick={() => setMobOpen(false)}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  fontFamily: "var(--disp,'Syne',sans-serif)", fontSize: 17, fontWeight: 700,
+                  color: pathname === item.href ? "#F4D06F" : "rgba(218,165,32,.8)",
+                  padding: "14px 0", textDecoration: "none",
+                }}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <>
+                <button
+                  onClick={() => setOpenIndex(prev => prev === i ? null : i)}
+                  style={{
+                    width: "100%", background: "none", border: "none", cursor: "pointer",
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    fontFamily: "var(--disp,'Syne',sans-serif)", fontSize: 17, fontWeight: 700,
+                    color: isActive(item) ? "#F4D06F" : "rgba(218,165,32,.8)", padding: "14px 0",
+                  }}
+                >
+                  {item.label}
+                  <ChevronDown open={openIndex === i} />
+                </button>
 
-            {openIndex === i && (
-              <div style={{ paddingBottom: 10 }}>
-                {item.links.map((link) => (
-                  <a
-                    key={link.text}
-                    href={link.href}
-                    onClick={() => { setOpenIndex(null); setMobOpen(false); }}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 10,
-                      padding: "9px 12px", fontSize: 14,
-                      color: "rgba(255,255,255,.65)", borderRadius: 8, textDecoration: "none",
-                    }}
-                  >
-                    <span style={{ fontSize: 16 }}>{link.icon}</span>{link.text}
-                  </a>
-                ))}
-              </div>
+                {openIndex === i && (
+                  <div style={{ paddingBottom: 10 }}>
+                    {item.links.map((link) => (
+                      <a
+                        key={link.text}
+                        href={link.href}
+                        onClick={() => { setOpenIndex(null); setMobOpen(false); }}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "9px 12px", fontSize: 14,
+                          color: "rgba(255,255,255,.65)", borderRadius: 8, textDecoration: "none",
+                        }}
+                      >
+                        <span style={{ fontSize: 16 }}>{link.icon}</span>{link.text}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         ))}
