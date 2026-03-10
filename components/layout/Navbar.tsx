@@ -74,10 +74,9 @@ const NAV_ITEMS: NavItem[] = [
     type: "dropdown",
     label: "Contact",
     links: [
-      { icon: "👥", text: "Meet the Team", href: "/team" },
-      { icon: "🚀", text: "Join Us",       href: "/contact" },
+      { icon: "🚀", text: "Contact Us", href: "/contact" },
     ],
-    matchPaths: ["/contact", "/team"],
+    matchPaths: ["/contact"],
   },
 ];
 

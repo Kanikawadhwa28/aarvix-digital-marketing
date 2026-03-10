@@ -5,7 +5,7 @@ export default function DualCta() {
         <span className="dp-icon">🏢</span>
         <h3>Are You a Brand?</h3>
         <p>Launch campaigns with India&apos;s top creators. Data-driven creator selection, real-time measurement, and a team that treats your budget like their own.</p>
-        <a href="/for-brands" className="btn btn-y">START YOUR CAMPAIGN →</a>
+        <a href="/for-brands" className="btn btn-y">JOIN AS A BRAND →</a>
       </div>
       <div className="dp dp-creators">
         <span className="dp-icon">🌟</span>

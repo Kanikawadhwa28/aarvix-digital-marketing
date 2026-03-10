@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, FormEvent, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import PageHero from "@/components/ui/PageHero";
-import TeamCards from "@/components/ui/TeamCards";
 
 /* ── Shared styles — top level so they apply to ALL sections ── */
 const CONTACT_STYLES = `
@@ -297,7 +296,7 @@ function ContactFormInner() {
   useEffect(() => {
     const presetQuery = searchParams.get("query") || "";
     const isCreator   = searchParams.get("creator") === "1";
-    setQueryDefault(presetQuery || (isCreator ? "Creator / Join as creator" : ""));
+    setQueryDefault(presetQuery || (isCreator ? "Creator " : ""));
   }, [searchParams]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -360,7 +359,7 @@ function ContactFormInner() {
   };
 
   return (
-    <section className="cp-section reveal" id="contact-form">
+    <section className="cp-section reveal vis" id="contact-form">
       <div className="tc" style={{ marginBottom: 20 }}>
         <span className="stag">Get in Touch</span>
         <h2 className="sh">Tell Us What You&apos;re Looking For</h2>
@@ -395,6 +394,7 @@ function ContactFormInner() {
               className={`cf-select${!queryDefault ? " cf-select-placeholder" : ""}`}
             >
               <option value="" disabled>Select campaign type…</option>
+              <option value="Creator">Creator</option>
               <option value="Barter Collaborations">Barter Collaborations</option>
               <option value="Paid Influencer Campaigns">Paid Influencer Campaigns</option>
               <option value="Affiliate Campaigns">Affiliate Campaigns</option>
@@ -477,17 +477,7 @@ export default function ContactPage() {
 
       <CalendlyEmbed />
 
-      <section className="cp-section reveal">
-        <div className="tc" style={{ marginBottom: 20 }}>
-          <span className="stag">The People You'll Work With</span>
-          <h2 className="sh">Meet the Team</h2>
-          <span className="gold-bar" />
-        </div>
-        <TeamCards size="small" />
-        <div style={{ textAlign: "center", marginTop: 24 }}>
-          <a href="/team" className="btn btn-o">View Full Team Page →</a>
-        </div>
-      </section>
+      {/* Team showcase removed from contact page as requested */}
     </>
   );
 }

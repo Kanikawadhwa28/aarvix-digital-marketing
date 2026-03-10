@@ -1,71 +1,103 @@
 import PageHero from "@/components/ui/PageHero";
-import TeamSection from "@/components/sections/TeamSection";
+import TeamCards from "@/components/ui/TeamCards";
 
 export default function AboutPage() {
   return (
     <>
-      <PageHero
-        tag="About Us"
-        h1="About Aarvix Digital Marketing"
-        subtitle="Aarvix Digital Marketing connects brands and creators through data-driven influencer campaigns and meaningful barter collaborations."
-        buttons={[]}
-      />
+      {/* Hero styled like the team page hero */}
+      <section className="team-hero reveal">
+        <div className="team-hero-bg" />
+        <PageHero
+          tag="About Us"
+          h1="About AARVIX"
+          subtitle="AARVIX is an influencer marketing agency that helps brands grow through creator collaborations and high-impact social media campaigns."
+          buttons={[
+            { label: "Work With AARVIX →", href: "/for-brands", variant: "gold" },
+            { label: "Talk to Our Team →", href: "/contact", variant: "outline" },
+          ]}
+        />
+      </section>
 
-      <section className="reveal">
+      {/* Main about content, matching the team-page body styling */}
+      <section className="team-bg reveal">
         <div className="tc" style={{ marginBottom: 24 }}>
-          <span className="stag">Who We Are</span>
-          <h2 className="sh">
-            A creator-first, ROI-obsessed influencer marketing partner.
-          </h2>
+          <span className="stag">About AARVIX</span>
+          <h2 className="sh">Creators + Strategy + Content = Brand Growth.</h2>
           <span className="gold-bar" />
         </div>
+
         <div className="about-grid">
           <div className="about-block">
-            <h3>Our Story</h3>
+            <h3>Who We Are</h3>
             <p>
-              Aarvix Digital Marketing was built to solve a simple problem: brands were spending heavily on influencer
-              marketing without clear strategy or measurement, while creators struggled to find the right brand
-              partnerships. We exist to align both sides and make every collaboration genuinely win–win.
+              AARVIX is an influencer marketing agency that helps brands grow through creator collaborations
+              and high-impact social media campaigns. We connect brands with the right influencers and content
+              creators to build authentic promotion, reach targeted audiences, and create content that drives
+              engagement.
+            </p>
+            <p style={{ marginTop: 12 }}>
+              Instead of traditional advertising, we help brands use trusted creators to promote products,
+              build social proof, and reach millions of potential customers.
             </p>
           </div>
+
           <div className="about-block">
             <h3>What We Do</h3>
+            <ul>
+              <li>Influencer marketing campaigns</li>
+              <li>Creator collaborations</li>
+              <li>Viral reels strategy</li>
+              <li>Brand growth through social media</li>
+            </ul>
+          </div>
+
+          <div className="about-block">
+            <h3>Our Mission</h3>
             <p>
-              We help brands plan, execute, and measure campaigns across Instagram, YouTube and beyond using a curated
-              network of creators. From creator discovery and pricing intelligence to campaign management and reporting,
-              Aarvix keeps everything under one roof.
+              To help brands grow faster by using the power of creators and authentic digital marketing.
             </p>
           </div>
+
           <div className="about-block">
-            <h3>How We Work</h3>
-            <p>
-              Every brief is handled by a strategist who understands both brand goals and creator realities. We
-              prioritise long–term relationships over one–off posts, focus on clear ROI, and operate with full
-              transparency on expectations, deliverables, and outcomes.
-            </p>
+            <h3>Why Brands Work With Us</h3>
+            <ul>
+              <li>Access to a growing network of creators</li>
+              <li>Campaign strategy and execution</li>
+              <li>Authentic promotion that builds trust</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      <TeamSection />
+      {/* Meet the team section moved here from Contact page */}
+      <section className="team-bg reveal">
+        <div className="tc" style={{ marginBottom: 18 }}>
+          <span className="stag">Leadership</span>
+          <h2 className="sh">Meet the Team</h2>
+          <span className="gold-bar" />
+        </div>
+        <TeamCards size="large" />
+      </section>
 
       <section className="reveal" style={{ textAlign: "center" }}>
         <span className="stag">Work With Us</span>
-        <h2 className="sh">Brand, creator, or future teammate?</h2>
+        <h2 className="sh">Ready to grow with creators?</h2>
         <p className="ssub" style={{ margin: "10px auto 0" }}>
-          If you care about thoughtful collaborations and real outcomes, we&apos;d love to talk.
+          Whether you&apos;re a brand planning your next campaign or a creator looking to collaborate, AARVIX
+          helps you turn content into measurable growth.
         </p>
         <span className="gold-bar" />
         <div style={{ marginTop: 30, display: "flex", justifyContent: "center", gap: 12 }}>
-          <a href="/contact" className="btn btn-y">
-            Contact Us →
+          <a href="/for-brands" className="btn btn-y">
+            For Brands →
           </a>
-          <a href="/contact" className="btn btn-o">
-            Join the Team →
+          <a href="/for-creators" className="btn btn-o">
+            For Creators →
           </a>
         </div>
       </section>
     </>
   );
 }
+
 

@@ -88,7 +88,7 @@ export default function ForCreatorsPage() {
           <span className="gold-bar" />
         </div>
         <div style={{ textAlign: "center", marginTop: 30 }}>
-          <a href="/contact?creator=1&query=Creator" className="btn btn-y">
+          <a href="/contact?creator=1" className="btn btn-y">
             Join as a Creator →
           </a>
         </div>

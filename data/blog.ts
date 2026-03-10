@@ -22,7 +22,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "barter-collab-2025",
     icon: "🤝",
-    image: "Cream_Purple_3D_Holographic_Content_Creator_Recruitment_Poster.png",
+    image: "Poster1.png",
     category: "Industry Report",
     title: "Wait — Brands Are Running Campaigns Without Paying Creators?!",
     excerpt: "Barter collabs are blowing up in India and here's exactly how it works.",
@@ -34,7 +34,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "micro-vs-mega",
     icon: "🎯",
-    image: "Black_and_White_Modern_Creativity_Poster.png",
+    image: "Poster2.png",
     category: "Strategy",
     title: "This 50K Creator Outperformed a 5M One. Here's Why 🤯",
     excerpt: "The follower count myth — finally exposed with real data.",
@@ -45,7 +45,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "creator-brief-template",
     icon: "💡",
-    image: "Purple_White_and_Black_Modern_Future_Made_Together_Poster.png",
+    image: "Poster3.png",
     category: "How-To",
     title: "Creators Loved This Brief So Much They Posted Extra Content for Free 😭🙌",
     excerpt: "The exact format we use to brief creators — and why it works.",
@@ -56,7 +56,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "zepto-7m-views",
     icon: "🚀",
-    image: "Purple_and_Blue_Neon_Modern_Designer_Technology_Poster.png",
+    image: "Poster4.png",
     category: "Case Study",
     title: "7 Million Views. No Massive Budget. How?! 👀",
     excerpt: "The Zepto campaign that nobody saw coming and what you can steal from it.",
@@ -67,7 +67,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "reels-vs-shorts",
     icon: "📱",
-    image: "black_modern_travel__Poster__Landscape__.png",
+    image: "Poster5.png",
     category: "Platform",
     title: "We Tested Reels vs. Shorts for Indian Brands. The Winner Surprised Us 😮",
     excerpt: "If you're putting all your budget in one platform, you need to read this.",

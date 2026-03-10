@@ -36,79 +36,8 @@ const IgIcon = () => (
   </svg>
 );
 
-// ── Reel modal (bottom-right corner) ─────────────────────────────────────────
-function ReelModal({ c, onClose }: { c: Campaign; onClose: () => void }) {
-  useEffect(() => {
-    const tryProcess = () => {
-      const w = window as any;
-      if (w.instgrm) {
-        w.instgrm.Embeds.process();
-      } else if (!document.getElementById("ig-embed-js")) {
-        const script = document.createElement("script");
-        script.id = "ig-embed-js";
-        script.src = "https://www.instagram.com/embed.js";
-        script.async = true;
-        script.onload = () => w.instgrm?.Embeds.process();
-        document.body.appendChild(script);
-      }
-    };
-    setTimeout(tryProcess, 80);
-  }, []);
-
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed", inset: 0, zIndex: 9999,
-        background: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)",
-        display: "flex", alignItems: "flex-end", justifyContent: "flex-end",
-        padding: "clamp(12px,3vw,24px)", boxSizing: "border-box",
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          position: "relative", width: "min(260px, calc(100vw - 24px))",
-          borderRadius: 16, overflow: "hidden", background: "#000",
-          boxShadow: "0 8px 16px rgba(0,0,0,.5),0 0 0 1px rgba(255,215,0,.15)",
-          animation: "cornerPop .25s ease", transformOrigin: "bottom right",
-        }}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute", top: 10, right: 10, zIndex: 10,
-            background: "rgba(0,0,0,0.7)", border: "none", cursor: "pointer",
-            color: "#fff", fontSize: 16, width: 32, height: 32,
-            borderRadius: "50%", display: "flex", alignItems: "center",
-            justifyContent: "center", backdropFilter: "blur(4px)",
-          }}
-        >✕</button>
-
-        <blockquote
-          className="instagram-media"
-          data-instgrm-captioned
-          data-instgrm-permalink={`${c.reelUrl}?utm_source=ig_embed&utm_campaign=loading`}
-          data-instgrm-version="14"
-          style={{ background: "#fff", border: 0, margin: 0, width: "100%", minWidth: 0, padding: 0 }}
-        />
-
-        <div style={{
-          padding: "10px 16px", display: "flex", alignItems: "center",
-          justifyContent: "space-between", fontSize: 13,
-          color: "var(--muted,#aaa)", background: "#000",
-        }}>
-          <span style={{ fontWeight: 700, color: "var(--gold,#ffd700)" }}>{c.brand}</span>
-          <span>{c.stat}</span>
-        </div>
-      </div>
-      <style>{`@keyframes cornerPop{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}`}</style>
-    </div>
-  );
-}
-
 // ── Campaign video card ───────────────────────────────────────────────────────
-function CampaignCard({ c, onPlay }: { c: Campaign; onPlay: () => void }) {
+function CampaignCard({ c }: { c: Campaign }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -121,7 +50,7 @@ function CampaignCard({ c, onPlay }: { c: Campaign; onPlay: () => void }) {
   }, []);
 
   return (
-    <div className="vcard" style={{ cursor: "pointer" }} onClick={onPlay}>
+    <div className="vcard" style={{ cursor: "default" }}>
       <div
         className="vcard-bg"
         style={{
@@ -152,24 +81,6 @@ function CampaignCard({ c, onPlay }: { c: Campaign; onPlay: () => void }) {
       <div className="vcard-ov" />
       <div className="vcard-lbl">{c.label}</div>
 
-      <div className="play-ring" style={{ pointerEvents: "none" }}>
-        <svg width="17" height="17" viewBox="0 0 24 24">
-          <polygon points="5 3 19 12 5 21 5 3" fill="#000" />
-        </svg>
-      </div>
-
-      {c.reelUrl && (
-        <div style={{
-          position: "absolute", top: 12, right: 12,
-          background: "rgba(0,0,0,0.65)", borderRadius: 8,
-          padding: "4px 8px", fontSize: 11, color: "#fff",
-          display: "flex", alignItems: "center", gap: 5,
-          backdropFilter: "blur(4px)", zIndex: 3,
-        }}>
-          <IgIcon /> Tap to play
-        </div>
-      )}
-
       <div className="vcard-meta">
         <div className="vcard-brand">{c.brand}</div>
         <div className="vcard-stat">{c.stat}</div>
@@ -180,17 +91,8 @@ function CampaignCard({ c, onPlay }: { c: Campaign; onPlay: () => void }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function ForBrandsPage() {
-  const [activeReel, setActiveReel] = useState<Campaign | null>(null);
-
   // Only campaigns with video/reel for the case studies section
   const videoCampaigns = campaigns.filter(c => c.videoPreview || c.image);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setActiveReel(null); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
   return (
     <>
       <PageHero
@@ -198,8 +100,7 @@ export default function ForBrandsPage() {
         h1="Run Campaigns That Actually Drive ROI"
         subtitle="Stop guessing. Start measuring. We have access to 7,50,000 creators on India&apos;s most data-driven influencer marketing platform."
         buttons={[
-          { label: "Start Free →", href: "#", variant: "gold" },
-          { label: "Talk to Sales →", href: "/contact", variant: "outline" },
+          { label: "Talk to Sales →", href: "/contact", variant: "gold" },
         ]}
       />
 
@@ -287,11 +188,7 @@ export default function ForBrandsPage() {
 
         <div className="vid-grid">
           {videoCampaigns.map((c) => (
-            <CampaignCard
-              key={c.id}
-              c={c}
-              onPlay={() => c.reelUrl ? setActiveReel(c) : null}
-            />
+            <CampaignCard key={c.id} c={c} />
           ))}
         </div>
 
@@ -304,7 +201,6 @@ export default function ForBrandsPage() {
         </p>
       </section>
 
-      {activeReel && <ReelModal c={activeReel} onClose={() => setActiveReel(null)} />}
     </>
   );
 }

@@ -1,6 +1,5 @@
 "use client"; // MUST be here - hooks need browser APIs
 
-import { useCursor } from "@/hooks/useCursor";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -16,7 +15,6 @@ export default function ClientProviders({
 }: {
   children: React.ReactNode;
 }) {
-  useCursor();          // Gold cursor dot + ring
   useScrollProgress();  // Progress bar + back-to-top button
   useScrollReveal();    // Fade-in animations on scroll
 

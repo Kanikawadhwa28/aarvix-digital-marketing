@@ -343,7 +343,7 @@ export default function HeroSection() {
             onTouchStart={() => setHovered(true)}
             onTouchEnd={() => setTimeout(() => setHovered(false), 600)}
           >
-            <a href="/for-brands"   className="hero-btn-main">Start a Campaign →</a>
+            <a href="/for-brands"   className="hero-btn-main">Join as a Brand →</a>
             <a href="/for-creators" className="hero-btn-sec">Join as Creator</a>
           </div>
 
