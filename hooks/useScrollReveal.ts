@@ -27,12 +27,26 @@ export function useScrollReveal() {
       { threshold: 0.08 } // Trigger when 8% of element is visible
     );
 
-    // Watch every element with class "reveal"
-    const revealEls = document.querySelectorAll<HTMLElement>(".reveal");
-    revealEls.forEach((el) => observer.observe(el));
+    // Helper to (re)attach observer to all .reveal elements
+    const watchAll = () => {
+      const revealEls = document.querySelectorAll<HTMLElement>(".reveal");
+      revealEls.forEach((el) => observer.observe(el));
+    };
+
+    // Initial scan
+    watchAll();
+
+    // Also watch for new .reveal elements on client-side navigation
+    const mo = new MutationObserver(() => {
+      watchAll();
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
 
     // Cleanup: stop watching when component unmounts
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      mo.disconnect();
+    };
   }, []);
 }
 

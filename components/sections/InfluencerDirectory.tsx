@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { creators } from "@/data/creators";
 
-const CATEGORY_TABS = ["Comedy", "Finance", "Parenting", "Beauty", "Fashion", "Fitness", "Food", "Gaming", "Tech", "Travel"] as const;
+const CATEGORY_TABS = ["All", "Comedy", "Finance", "Parenting", "Beauty", "Fashion", "Fitness", "Food", "Gaming", "Tech", "Travel"] as const;
 
 type Category = (typeof CATEGORY_TABS)[number];
 
@@ -34,6 +34,15 @@ const placeholder = (category: Category, baseEmoji: string): Card[] => [
 ];
 
 const CATEGORY_MAP: Record<Category, Card[]> = {
+  All: [
+    // Real comedy creators first
+    ...comedyCards,
+    // Representative placeholders from other categories
+    ...placeholder("Finance", "💰"),
+    ...placeholder("Beauty", "💄"),
+    ...placeholder("Fashion", "👗"),
+    ...placeholder("Fitness", "💪"),
+  ],
   Comedy: comedyCards.length ? comedyCards : placeholder("Comedy", "😂"),
   Finance: placeholder("Finance", "💰"),
   Parenting: placeholder("Parenting", "👨‍👩‍👧"),
@@ -54,16 +63,19 @@ export default function InfluencerDirectory() {
     ? (categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1).toLowerCase())
     : null;
 
-  const [active, setActive] = useState<Category>("Comedy");
+  const [active, setActive] = useState<Category>("All");
+  const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     if (!normalizedFromQuery) return;
     if (CATEGORY_TABS.includes(normalizedFromQuery as Category)) {
       setActive(normalizedFromQuery as Category);
+      setVisibleCount(4);
     }
   }, [normalizedFromQuery]);
 
   const cards = CATEGORY_MAP[active] ?? [];
+  const showLoadMore = cards.length > visibleCount;
 
   return (
     <>
@@ -126,7 +138,10 @@ export default function InfluencerDirectory() {
             <button
               key={cat}
               className={`catb${active === cat ? " on" : ""}`}
-              onClick={() => setActive(cat)}
+              onClick={() => {
+                setActive(cat);
+                setVisibleCount(4);
+              }}
             >
               {cat}
             </button>
@@ -135,7 +150,7 @@ export default function InfluencerDirectory() {
 
         {/* Grid */}
         <div className="inf-grid">
-          {cards.map((inf) => (
+          {cards.slice(0, visibleCount).map((inf) => (
             <div key={`${inf.name}-${inf.category}`} className="icard">
               <div className="icard-photo">
 
@@ -190,6 +205,17 @@ export default function InfluencerDirectory() {
             </div>
           ))}
         </div>
+
+        {showLoadMore && (
+          <div style={{ textAlign: "center", marginTop: 24 }}>
+            <button
+              className="btn btn-w"
+              onClick={() => setVisibleCount((c) => c + 4)}
+            >
+              Load more creators →
+            </button>
+          </div>
+        )}
       </section>
     </>
   );

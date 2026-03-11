@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import BrandLogo from "@/components/ui/BrandLogo";
 
 type NavLinkItem = {
@@ -22,15 +23,9 @@ type NavDropdownItem = {
 type NavItem = NavLinkItem | NavDropdownItem;
 
 const NAV_ITEMS: NavItem[] = [
+  { type: "link", label: "Home", href: "/", matchPaths: ["/"] },
   {
-    type: "link",
-    label: "Home",
-    href: "/",
-    matchPaths: ["/"],
-  },
-  {
-    type: "dropdown",
-    label: "Top Creators",
+    type: "dropdown", label: "Top Creators",
     links: [
       { icon: "⭐", text: "Creators",  href: "/for-creators" },
       { icon: "😄", text: "Comedy",    href: "/for-creators?category=comedy" },
@@ -44,38 +39,25 @@ const NAV_ITEMS: NavItem[] = [
       { icon: "📱", text: "Tech",      href: "/for-creators?category=tech" },
       { icon: "✈️", text: "Travel",    href: "/for-creators?category=travel" },
     ],
-    wide: true,
-    matchPaths: ["/for-creators"],
+    wide: true, matchPaths: ["/for-creators"],
   },
   {
-    type: "dropdown",
-    label: "For Brands",
-    links: [
-      { icon: "🏢", text: "Brand Campaigns", href: "/for-brands" },
-    ],
+    type: "dropdown", label: "For Brands",
+    links: [{ icon: "🏢", text: "Brand Campaigns", href: "/for-brands" }],
     matchPaths: ["/for-brands"],
   },
   {
-    type: "dropdown",
-    label: "Our Work",
+    type: "dropdown", label: "Our Work",
     links: [
-      { icon: "📁", text: "Campaigns",          href: "/platform#work" },
-      { icon: "✍️", text: "Blogs",             href: "/platform#blog" },
+      { icon: "📁", text: "Campaigns", href: "/platform#work" },
+      { icon: "✍️", text: "Blogs",     href: "/platform#blog" },
     ],
     matchPaths: ["/platform"],
   },
+  { type: "link", label: "About Us", href: "/about", matchPaths: ["/about"] },
   {
-    type: "link",
-    label: "About Us",
-    href: "/about",
-    matchPaths: ["/about"],
-  },
-  {
-    type: "dropdown",
-    label: "Contact",
-    links: [
-      { icon: "🚀", text: "Contact Us", href: "/contact" },
-    ],
+    type: "dropdown", label: "Contact",
+    links: [{ icon: "🚀", text: "Contact Us", href: "/contact" }],
     matchPaths: ["/contact"],
   },
 ];
@@ -90,6 +72,7 @@ const ChevronDown = ({ open }: { open?: boolean }) => (
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router   = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [mobOpen, setMobOpen]     = useState(false);
   const [scrolled, setScrolled]   = useState(false);
@@ -104,33 +87,33 @@ export default function Navbar() {
   useEffect(() => { setMobOpen(false); setOpenIndex(null); }, [pathname]);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+    const handler = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node))
         setOpenIndex(null);
-      }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   const isActive = (item: NavItem) =>
     item.matchPaths.some(p => pathname === p || (p !== "/" && pathname.startsWith(p)));
 
-  const toggleDesktop = (i: number) =>
-    setOpenIndex(prev => prev === i ? null : i);
+  const toggleDesktop = (i: number) => setOpenIndex(prev => prev === i ? null : i);
+
+  /*
+   * handleMobileLink — closes menu first, then navigates.
+   * Using router.push so hash links (#work, #blog) also trigger close
+   * even though they don't change pathname (useEffect[pathname] wouldn't fire).
+   */
+  const handleMobileLink = (href: string) => {
+    setMobOpen(false);
+    setOpenIndex(null);
+    router.push(href);
+  };
 
   return (
     <>
       <style>{`
-        :root {
-          --aarvix-gold-start: #C9972B;
-          --aarvix-gold-mid:   #E5B75C;
-          --aarvix-gold-end:   #F4D06F;
-          --aarvix-black:      #000000;
-          --aarvix-black-soft: #0a0a0a;
-          --aarvix-black-card: #111111;
-        }
-
         #nav {
           position: fixed; top: 0; left: 0;
           width: 100%; max-width: 100vw; z-index: 1000;
@@ -152,7 +135,6 @@ export default function Navbar() {
           height: 66px !important; gap: 0 !important;
           grid-template-columns: unset !important;
         }
-
         a.nav-logo {
           display: flex; align-items: center; gap: 9px;
           text-decoration: none; flex-shrink: 0; margin-right: 24px;
@@ -161,9 +143,7 @@ export default function Navbar() {
           font-family: var(--disp, 'Syne', sans-serif);
           font-size: 20px; font-weight: 800;
           background: linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
           letter-spacing: 0.5px; white-space: nowrap; line-height: 1;
         }
         .nav-logo-dot {
@@ -175,7 +155,6 @@ export default function Navbar() {
           0%,100% { box-shadow: 0 0 0 0 rgba(229,183,92,.5); }
           50%      { box-shadow: 0 0 0 8px transparent; }
         }
-
         .nav-links {
           display: flex; align-items: center; gap: 2px;
           list-style: none; margin: 0; padding: 0; flex: 1;
@@ -190,22 +169,16 @@ export default function Navbar() {
           white-space: nowrap; user-select: none;
           background: none; border: none;
         }
-        .nav-item:hover > .nav-a {
-          color: #F4D06F;
-          background: rgba(229,183,92,.1);
-        }
+        .nav-item:hover > .nav-a { color: #F4D06F; background: rgba(229,183,92,.1); }
         .nav-item.active > .nav-a,
         .nav-item.open > .nav-a {
-          color: #F4D06F !important;
-          background: rgba(201,151,43,.15) !important;
+          color: #F4D06F !important; background: rgba(201,151,43,.15) !important;
           text-shadow: 0 0 12px rgba(244,208,111,.3);
         }
-
         .nav-drop {
           position: absolute; top: 100%; left: 50%;
           transform: translateX(-50%) translateY(-4px);
-          background: #050505;
-          border: 1px solid rgba(201,151,43,.25);
+          background: #050505; border: 1px solid rgba(201,151,43,.25);
           border-radius: 16px; padding: 10px; min-width: 190px;
           opacity: 0; visibility: hidden; pointer-events: none;
           transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
@@ -225,28 +198,20 @@ export default function Navbar() {
           font-size: 12px; color: rgba(255,255,255,.55); text-decoration: none;
           transition: all .16s; font-family: var(--body, 'DM Sans', sans-serif);
         }
-        .nav-drop a:hover {
-          color: #F4D06F;
-          background: rgba(184,134,11,.14);
-        }
+        .nav-drop a:hover { color: #F4D06F; background: rgba(184,134,11,.14); }
         .nav-drop-ic {
           width: 26px; height: 26px; border-radius: 6px;
           background: rgba(201,151,43,.08);
           display: flex; align-items: center; justify-content: center;
           font-size: 12px; flex-shrink: 0; transition: background .16s;
         }
-        .nav-drop a:hover .nav-drop-ic {
-          background: linear-gradient(135deg, #C9972B, #F4D06F);
-        }
-
+        .nav-drop a:hover .nav-drop-ic { background: linear-gradient(135deg, #C9972B, #F4D06F); }
         .nav-r { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
         .nav-badge {
           display: flex; align-items: center; gap: 6px;
-          padding: 5px 10px 5px 8px;
-          background: rgba(0,0,0,.8);
-          border: 1px solid rgba(201,151,43,.4);
-          border-radius: 50px; backdrop-filter: blur(12px);
-          white-space: nowrap; flex-shrink: 0;
+          padding: 5px 10px 5px 8px; background: rgba(0,0,0,.8);
+          border: 1px solid rgba(201,151,43,.4); border-radius: 50px;
+          backdrop-filter: blur(12px); white-space: nowrap; flex-shrink: 0;
           animation: badge-bob 3s ease-in-out infinite;
         }
         @keyframes badge-bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
@@ -257,34 +222,23 @@ export default function Navbar() {
           -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
         .nav-badge-lbl { font-size: 10px; color: rgba(255,255,255,.55); }
-
         .btn-cta {
-          padding: 8px 20px; border-radius: 8px;
-          font-size: 12.5px; font-weight: 700;
+          padding: 8px 20px; border-radius: 8px; font-size: 12.5px; font-weight: 700;
           background: linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%);
-          color: #000;
-          text-decoration: none; transition: all .22s;
+          color: #000; text-decoration: none; transition: all .22s;
           box-shadow: 0 4px 20px rgba(229,183,92,.3), 0 0 0 1px rgba(244,208,111,.15);
-          font-family: var(--body,'DM Sans',sans-serif);
-          white-space: nowrap; flex-shrink: 0;
+          font-family: var(--body,'DM Sans',sans-serif); white-space: nowrap; flex-shrink: 0;
         }
-        .btn-cta:hover {
-          filter: brightness(1.08);
-          transform: translateY(-1px);
-          box-shadow: 0 6px 28px rgba(229,183,92,.45);
-        }
+        .btn-cta:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(229,183,92,.45); }
         .btn-cta-sm {
-          display: none;
-          padding: 6px 12px; border-radius: 8px;
+          display: none; padding: 6px 12px; border-radius: 8px;
           font-size: 11px; font-weight: 700;
           background: linear-gradient(135deg, #C9972B, #F4D06F);
-          color: #000;
-          text-decoration: none; white-space: nowrap; flex-shrink: 0;
+          color: #000; text-decoration: none; white-space: nowrap; flex-shrink: 0;
           font-family: var(--body,'DM Sans',sans-serif); transition: all .2s;
           box-shadow: 0 3px 14px rgba(229,183,92,.25);
         }
         .btn-cta-sm:hover { transform: translateY(-1px); box-shadow: 0 5px 20px rgba(229,183,92,.4); }
-
         .hbg {
           display: none; flex-direction: column; gap: 5px;
           cursor: pointer; padding: 8px; margin-left: 8px;
@@ -296,10 +250,8 @@ export default function Navbar() {
           background: linear-gradient(90deg, #C9972B, #F4D06F);
           border-radius: 2px; transition: all .3s;
         }
-
         .mob-nav {
-          position: fixed; inset: 0;
-          background: #000; z-index: 999;
+          position: fixed; inset: 0; background: #000; z-index: 9995;
           display: flex; flex-direction: column;
           padding: 82px clamp(16px,4vw,28px) 40px;
           transform: translateX(100%);
@@ -308,7 +260,20 @@ export default function Navbar() {
           border-left: 1px solid rgba(201,151,43,.2);
         }
         .mob-nav.open { transform: translateX(0); }
-
+        .mob-btn {
+          width: 100%; background: none; border: none; cursor: pointer;
+          display: flex; align-items: center; justify-content: space-between;
+          font-family: var(--disp,'Syne',sans-serif); font-size: 17px; font-weight: 700;
+          padding: 14px 0; text-align: left;
+        }
+        .mob-sub-btn {
+          width: 100%; background: none; border: none; cursor: pointer;
+          display: flex; align-items: center; gap: 10px;
+          padding: 9px 12px; font-size: 14px; text-align: left;
+          color: rgba(255,255,255,.65); border-radius: 8px;
+          font-family: var(--body,'DM Sans',sans-serif);
+        }
+        .mob-sub-btn:hover { background: rgba(229,183,92,.07); color: #F4D06F; }
         @media (max-width: 860px) {
           .nav-links  { display: none !important; }
           .nav-badge  { display: none !important; }
@@ -320,57 +285,39 @@ export default function Navbar() {
         }
       `}</style>
 
+      {/* ── DESKTOP NAV ── */}
       <nav id="nav" className={scrolled ? "scrolled" : ""}>
         <div className="nav-inner">
-
-          <a href="/" className="nav-logo">
+          <Link href="/" className="nav-logo">
             <BrandLogo />
             <div className="nav-logo-text">Aarvix Digital Marketing</div>
             <div className="nav-logo-dot" />
-          </a>
+          </Link>
 
           <ul className="nav-links" ref={navRef}>
             {NAV_ITEMS.map((item, i) => (
-              <li
-                key={item.label}
-                className={[
-                  "nav-item",
-                  isActive(item) ? "active" : "",
-                  openIndex === i ? "open" : "",
-                ].filter(Boolean).join(" ")}
-              >
+              <li key={item.label} className={["nav-item", isActive(item) ? "active" : "", openIndex === i ? "open" : ""].filter(Boolean).join(" ")}>
                 {item.type === "link" ? (
-                  <a
-                    href={item.href}
-                    className="nav-a"
-                    style={{
-                      color: pathname === item.href ? "#F4D06F" : undefined,
-                      background: pathname === item.href ? "rgba(201,151,43,.15)" : undefined,
-                    }}
-                  >
+                  <Link href={item.href} className="nav-a"
+                    style={{ color: pathname === item.href ? "#F4D06F" : undefined, background: pathname === item.href ? "rgba(201,151,43,.15)" : undefined }}>
                     {item.label}
-                  </a>
+                  </Link>
                 ) : (
                   <>
-                    <button
-                      className="nav-a"
-                      onClick={() => toggleDesktop(i)}
-                      aria-expanded={openIndex === i}
-                    >
+                    <button className="nav-a" onClick={() => toggleDesktop(i)} aria-expanded={openIndex === i}>
                       {item.label} <ChevronDown open={openIndex === i} />
                     </button>
-
                     <div className={`nav-drop${item.wide ? " wide" : ""}`}>
                       {item.wide ? (
                         <div className="nav-drop-grid">
-                          {item.links.map((link) => (
+                          {item.links.map(link => (
                             <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
                               <span className="nav-drop-ic">{link.icon}</span>{link.text}
                             </a>
                           ))}
                         </div>
                       ) : (
-                        item.links.map((link) => (
+                        item.links.map(link => (
                           <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
                             <span className="nav-drop-ic">{link.icon}</span>{link.text}
                           </a>
@@ -391,9 +338,8 @@ export default function Navbar() {
                 <div className="nav-badge-lbl">Creators</div>
               </div>
             </div>
-            <a href="/contact" className="btn-cta">Join Us</a>
-            <a href="/contact" className="btn-cta-sm">Join Us</a>
-
+            <Link href="/contact" className="btn-cta">Join Us</Link>
+            <Link href="/contact" className="btn-cta-sm">Join Us</Link>
             <div className="hbg" onClick={() => setMobOpen(p => !p)} aria-label="Toggle menu">
               <span style={mobOpen ? { transform: "rotate(45deg) translate(5px,5px)" } : {}} />
               <span style={mobOpen ? { opacity: 0 } : {}} />
@@ -403,32 +349,24 @@ export default function Navbar() {
         </div>
       </nav>
 
+      {/* ── MOBILE MENU ── */}
       <div className={`mob-nav${mobOpen ? " open" : ""}`}>
         {NAV_ITEMS.map((item, i) => (
           <div key={item.label} style={{ borderBottom: "1px solid rgba(184,134,11,.2)" }}>
             {item.type === "link" ? (
-              <a
-                href={item.href}
-                onClick={() => setMobOpen(false)}
-                style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  fontFamily: "var(--disp,'Syne',sans-serif)", fontSize: 17, fontWeight: 700,
-                  color: pathname === item.href ? "#F4D06F" : "rgba(218,165,32,.8)",
-                  padding: "14px 0", textDecoration: "none",
-                }}
+              <button
+                className="mob-btn"
+                style={{ color: pathname === item.href ? "#F4D06F" : "rgba(218,165,32,.8)" }}
+                onClick={() => handleMobileLink(item.href)}
               >
                 {item.label}
-              </a>
+              </button>
             ) : (
               <>
                 <button
+                  className="mob-btn"
+                  style={{ color: isActive(item) ? "#F4D06F" : "rgba(218,165,32,.8)" }}
                   onClick={() => setOpenIndex(prev => prev === i ? null : i)}
-                  style={{
-                    width: "100%", background: "none", border: "none", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "space-between",
-                    fontFamily: "var(--disp,'Syne',sans-serif)", fontSize: 17, fontWeight: 700,
-                    color: isActive(item) ? "#F4D06F" : "rgba(218,165,32,.8)", padding: "14px 0",
-                  }}
                 >
                   {item.label}
                   <ChevronDown open={openIndex === i} />
@@ -436,19 +374,14 @@ export default function Navbar() {
 
                 {openIndex === i && (
                   <div style={{ paddingBottom: 10 }}>
-                    {item.links.map((link) => (
-                      <a
+                    {item.links.map(link => (
+                      <button
                         key={link.text}
-                        href={link.href}
-                        onClick={() => { setOpenIndex(null); setMobOpen(false); }}
-                        style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          padding: "9px 12px", fontSize: 14,
-                          color: "rgba(255,255,255,.65)", borderRadius: 8, textDecoration: "none",
-                        }}
+                        className="mob-sub-btn"
+                        onClick={() => handleMobileLink(link.href)}
                       >
                         <span style={{ fontSize: 16 }}>{link.icon}</span>{link.text}
-                      </a>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -458,20 +391,19 @@ export default function Navbar() {
         ))}
 
         <div style={{ marginTop: 28 }}>
-          <a
-            href="/contact"
-            onClick={() => setMobOpen(false)}
+          <button
+            onClick={() => handleMobileLink("/contact")}
             style={{
+              width: "100%", border: "none", cursor: "pointer",
               display: "block", textAlign: "center", padding: "14px", borderRadius: 999,
               background: "linear-gradient(135deg, #F4D06F 0%, #E5B75C 40%, #C9972B 100%)",
-              color: "#000",
-              fontWeight: 800, fontSize: 15, textDecoration: "none",
+              color: "#000", fontWeight: 800, fontSize: 15,
               fontFamily: "var(--disp,'Syne',sans-serif)",
               boxShadow: "0 4px 20px rgba(229,183,92,.3)",
             }}
           >
             Join Us →
-          </a>
+          </button>
         </div>
       </div>
     </>

@@ -19,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ClientProviders>
+          <div id="cur" />
           <div id="sprog" />
           <BackToTop />
           <Navbar />

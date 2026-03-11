@@ -159,7 +159,7 @@ const SCRIPT_ID    = "calendly-widget-js";
 const CSS_ID       = "calendly-widget-css";
 type BookingState  = "idle" | "booked" | "rebooked";
 
-function CalendlyEmbed({ height = 700 }: { height?: number }) {
+function CalendlyEmbed({ height = 600 }: { height?: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [bookingState, setBookingState] = useState<BookingState>("idle");
 
@@ -265,13 +265,20 @@ function CalendlyEmbed({ height = 700 }: { height?: number }) {
         </div>
       )}
 
-      <div ref={containerRef} style={{
-        minWidth: 0, width: "100%", maxWidth: "100%",
-        height: bookingState === "idle" ? height : 0,
-        overflow: "hidden", borderRadius: 16,
-        border: bookingState === "idle" ? "1px solid rgba(255,255,255,0.08)" : "none",
-        transition: "height 0.3s ease",
-      }} />
+      <div
+        ref={containerRef}
+        style={{
+          minWidth: 0,
+          width: "100%",
+          maxWidth: "100%",
+          height: bookingState === "idle" ? height : 0,
+          minHeight: bookingState === "idle" ? 420 : 0,
+          overflow: "hidden",
+          borderRadius: 16,
+          border: bookingState === "idle" ? "1px solid rgba(255,255,255,0.08)" : "none",
+          transition: "height 0.3s ease",
+        }}
+      />
 
       {bookingState === "idle" && (
         <div className="cal-noslot">
