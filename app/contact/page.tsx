@@ -472,7 +472,7 @@ export default function ContactPage() {
             <div className="cp-card-emoji">💬</div>
             <h3>Chat on WhatsApp</h3>
             <p>Quickest way to reach us directly.</p>
-            <a href="https://wa.me/919801458766?text=Hi%20Avenue%20Marketing%20Agency!%20I%20came%20across%20your%20website%20and%20I%27m%20interested%20in%20discussing%20a%20potential%20campaign%20or%20collaboration.%20Could%20we%20connect%3F"
+            <a href="https://wa.me/919801458766?text=Hi%Aarvix%20Marketing%20Agency!%20I%20came%20across%20your%20website%20and%20I%27m%20interested%20in%20discussing%20a%20potential%20campaign%20or%20collaboration.%20Could%20we%20connect%3F"
               className="btn btn-y" target="_blank" rel="noreferrer"
               style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               <WhatsAppIcon /> Open WhatsApp →
