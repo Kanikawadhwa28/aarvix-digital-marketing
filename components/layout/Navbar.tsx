@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import BrandLogo from "@/components/ui/BrandLogo";
 
@@ -72,11 +72,11 @@ const ChevronDown = ({ open }: { open?: boolean }) => (
 
 export default function Navbar() {
   const pathname = usePathname();
-  const router   = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [mobOpen, setMobOpen]     = useState(false);
   const [scrolled, setScrolled]   = useState(false);
-  const navRef = useRef<HTMLUListElement>(null);
+  // Track hover state per item for desktop
+  const hoverTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -86,32 +86,28 @@ export default function Navbar() {
 
   useEffect(() => { setMobOpen(false); setOpenIndex(null); }, [pathname]);
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node))
-        setOpenIndex(null);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
   const isActive = (item: NavItem) =>
     item.matchPaths.some(p => pathname === p || (p !== "/" && pathname.startsWith(p)));
 
-  const toggleDesktop = (i: number) => setOpenIndex(prev => prev === i ? null : i);
-
-  /*
-   * handleMobileLink — closes menu first, then navigates.
-   * Using router.push so hash links (#work, #blog) also trigger close
-   * even though they don't change pathname (useEffect[pathname] wouldn't fire).
-   */
-  const handleMobileLink = (href: string) => {
-    setMobOpen(false);
-    setOpenIndex(null);
-    // Let state update paint first so the menu closes instantly,
-    // then navigate (helps on slower devices / search-param-only routes).
-    requestAnimationFrame(() => router.push(href));
+  // Desktop: open on mouse enter, close on mouse leave with delay
+  const handleMouseEnter = (i: number) => {
+    if (hoverTimers.current[i]) clearTimeout(hoverTimers.current[i]);
+    setOpenIndex(i);
   };
+  const handleMouseLeave = (i: number) => {
+    hoverTimers.current[i] = setTimeout(() => {
+      setOpenIndex(prev => prev === i ? null : prev);
+    }, 120);
+  };
+
+  // Navigate + close everything
+  const navigate = (href: string) => {
+    setOpenIndex(null);
+    setMobOpen(false);
+    window.location.assign(href);
+  };
+
+  const handleMobileLink = (href: string) => navigate(href);
 
   return (
     <>
@@ -177,28 +173,37 @@ export default function Navbar() {
           color: #F4D06F !important; background: rgba(201,151,43,.15) !important;
           text-shadow: 0 0 12px rgba(244,208,111,.3);
         }
+
+        /* ── KEY FIX: dropdown is always rendered, shown via opacity+pointer-events only ── */
         .nav-drop {
           position: absolute; top: 100%; left: 50%;
           transform: translateX(-50%) translateY(-4px);
           background: #050505; border: 1px solid rgba(201,151,43,.25);
           border-radius: 16px; padding: 10px; min-width: 190px;
-          opacity: 0; visibility: hidden; pointer-events: none;
-          transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+          /* NO visibility:hidden — use opacity + pointer-events only */
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity .18s ease, transform .18s ease;
           box-shadow: 0 24px 60px rgba(0,0,0,.97), 0 0 0 1px rgba(229,183,92,.04), 0 8px 32px rgba(201,151,43,.08);
           z-index: 9000;
         }
         .nav-drop.wide { min-width: 320px; }
         .nav-drop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+
+        /* Open state — immediately clickable */
         .nav-item.open > .nav-drop {
-          opacity: 1; visibility: visible; pointer-events: all;
+          opacity: 1;
+          pointer-events: auto;
           transform: translateX(-50%) translateY(4px);
-          transition: opacity .18s ease, transform .18s ease, visibility 0s linear 0s;
         }
+
+        /* ── Dropdown links — use <a> tags for reliable navigation ── */
         .nav-drop a {
           display: flex; align-items: center; gap: 8px;
           padding: 8px 10px; border-radius: 8px;
           font-size: 12px; color: rgba(255,255,255,.55); text-decoration: none;
           transition: all .16s; font-family: var(--body, 'DM Sans', sans-serif);
+          cursor: pointer;
         }
         .nav-drop a:hover { color: #F4D06F; background: rgba(184,134,11,.14); }
         .nav-drop-ic {
@@ -268,6 +273,7 @@ export default function Navbar() {
           display: flex; align-items: center; justify-content: space-between;
           font-family: var(--disp,'Syne',sans-serif); font-size: 17px; font-weight: 700;
           padding: 14px 0; text-align: left;
+          color: rgba(218,165,32,.8);
         }
         .mob-sub-btn {
           width: 100%; background: none; border: none; cursor: pointer;
@@ -277,6 +283,17 @@ export default function Navbar() {
           font-family: var(--body,'DM Sans',sans-serif);
         }
         .mob-sub-btn:hover { background: rgba(229,183,92,.07); color: #F4D06F; }
+        .mob-btn svg {
+          width: 16px; height: 16px; stroke-width: 2.4; padding: 2px;
+          border-radius: 999px;
+          background: radial-gradient(circle at 30% 0%, rgba(244,208,111,.25), transparent 60%);
+          box-shadow: 0 0 0 1px rgba(201,151,43,.35);
+        }
+        @media (min-width: 861px){
+          .nav-links .nav-item .nav-a svg{
+            width: 10px; height: 10px; padding: 0; box-shadow: none; background: none;
+          }
+        }
         @media (max-width: 860px) {
           .nav-links  { display: none !important; }
           .nav-badge  { display: none !important; }
@@ -297,32 +314,73 @@ export default function Navbar() {
             <div className="nav-logo-dot" />
           </Link>
 
-          <ul className="nav-links" ref={navRef}>
+          <ul className="nav-links">
             {NAV_ITEMS.map((item, i) => (
-              <li key={item.label} className={["nav-item", isActive(item) ? "active" : "", openIndex === i ? "open" : ""].filter(Boolean).join(" ")}>
+              <li
+                key={item.label}
+                className={[
+                  "nav-item",
+                  isActive(item) ? "active" : "",
+                  openIndex === i ? "open" : "",
+                ].filter(Boolean).join(" ")}
+                onMouseEnter={() => item.type === "dropdown" && handleMouseEnter(i)}
+                onMouseLeave={() => item.type === "dropdown" && handleMouseLeave(i)}
+              >
                 {item.type === "link" ? (
-                  <Link href={item.href} className="nav-a"
-                    style={{ color: pathname === item.href ? "#F4D06F" : undefined, background: pathname === item.href ? "rgba(201,151,43,.15)" : undefined }}>
+                  <Link
+                    href={item.href}
+                    className="nav-a"
+                    style={{
+                      color: pathname === item.href ? "#F4D06F" : undefined,
+                      background: pathname === item.href ? "rgba(201,151,43,.15)" : undefined,
+                    }}
+                  >
                     {item.label}
                   </Link>
                 ) : (
                   <>
-                    <button className="nav-a" onClick={() => toggleDesktop(i)} aria-expanded={openIndex === i}>
+                    {/* Button just toggles open state — actual nav happens via links below */}
+                    <button
+                      className="nav-a"
+                      onClick={() => setOpenIndex(prev => prev === i ? null : i)}
+                      aria-expanded={openIndex === i}
+                    >
                       {item.label} <ChevronDown open={openIndex === i} />
                     </button>
+
+                    {/* Dropdown — uses plain <a> tags for bulletproof navigation */}
                     <div className={`nav-drop${item.wide ? " wide" : ""}`}>
                       {item.wide ? (
                         <div className="nav-drop-grid">
                           {item.links.map(link => (
-                            <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
-                              <span className="nav-drop-ic">{link.icon}</span>{link.text}
+                            <a
+                              key={link.text}
+                              href={link.href}
+                              onMouseDown={(e) => {
+                                // onMouseDown fires before blur, ensuring navigation always works
+                                e.preventDefault();
+                                setOpenIndex(null);
+                                window.location.assign(link.href);
+                              }}
+                            >
+                              <span className="nav-drop-ic">{link.icon}</span>
+                              {link.text}
                             </a>
                           ))}
                         </div>
                       ) : (
                         item.links.map(link => (
-                          <a key={link.text} href={link.href} onClick={() => setOpenIndex(null)}>
-                            <span className="nav-drop-ic">{link.icon}</span>{link.text}
+                          <a
+                            key={link.text}
+                            href={link.href}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setOpenIndex(null);
+                              window.location.assign(link.href);
+                            }}
+                          >
+                            <span className="nav-drop-ic">{link.icon}</span>
+                            {link.text}
                           </a>
                         ))
                       )}
@@ -343,7 +401,11 @@ export default function Navbar() {
             </div>
             <Link href="/contact" className="btn-cta">Join Us</Link>
             <Link href="/contact" className="btn-cta-sm">Join Us</Link>
-            <div className="hbg" onClick={() => setMobOpen(p => !p)} aria-label="Toggle menu">
+            <div
+              className="hbg"
+              onClick={() => setMobOpen(p => !p)}
+              aria-label="Toggle menu"
+            >
               <span style={mobOpen ? { transform: "rotate(45deg) translate(5px,5px)" } : {}} />
               <span style={mobOpen ? { opacity: 0 } : {}} />
               <span style={mobOpen ? { transform: "rotate(-45deg) translate(5px,-5px)" } : {}} />
@@ -376,14 +438,15 @@ export default function Navbar() {
                 </button>
 
                 {openIndex === i && (
-                  <div style={{ paddingBottom: 10 }}>
+                  <div style={{ paddingBottom: 10, touchAction: "manipulation" }}>
                     {item.links.map(link => (
                       <button
                         key={link.text}
                         className="mob-sub-btn"
                         onClick={() => handleMobileLink(link.href)}
                       >
-                        <span style={{ fontSize: 16 }}>{link.icon}</span>{link.text}
+                        <span style={{ fontSize: 16 }}>{link.icon}</span>
+                        {link.text}
                       </button>
                     ))}
                   </div>

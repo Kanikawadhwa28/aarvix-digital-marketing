@@ -49,6 +49,7 @@ const CAMPAIGNS = [
 function ReelCard({ c, big }: { c: typeof CAMPAIGNS[0]; big?: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const triedPlayRef = useRef(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -59,8 +60,12 @@ function ReelCard({ c, big }: { c: typeof CAMPAIGNS[0]; big?: boolean }) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            video.currentTime = 0;
-            video.play().catch(() => {});
+            // iOS sometimes refuses autoplay until user gesture; try once when visible.
+            if (!triedPlayRef.current) {
+              triedPlayRef.current = true;
+              video.currentTime = 0;
+              video.play().catch(() => {});
+            }
           } else {
             video.pause();
           }
@@ -91,7 +96,7 @@ function ReelCard({ c, big }: { c: typeof CAMPAIGNS[0]; big?: boolean }) {
           <video
             ref={videoRef}
             src={c.videoPreview}
-            muted loop playsInline autoPlay preload="auto"
+            muted loop playsInline autoPlay preload="metadata"
             style={{
               position: "absolute", inset: 0,
               width: "100%", height: "100%",
@@ -100,6 +105,10 @@ function ReelCard({ c, big }: { c: typeof CAMPAIGNS[0]; big?: boolean }) {
               backgroundColor: "#000",
             }}
             onCanPlay={e => { (e.target as HTMLVideoElement).style.opacity = "1"; }}
+            onError={(e) => {
+              // If preview fails on mobile, keep the emoji visible (video stays hidden).
+              (e.target as HTMLVideoElement).style.display = "none";
+            }}
           />
         )}
       </div>

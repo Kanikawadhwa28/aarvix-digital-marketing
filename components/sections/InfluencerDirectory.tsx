@@ -74,7 +74,9 @@ export default function InfluencerDirectory() {
     }
   }, [normalizedFromQuery]);
 
-  const cards = categoryMap[active] ?? [];
+  // Cap "All" to a maximum of 12 creators on first view
+  const baseCards = categoryMap[active] ?? [];
+  const cards = active === "All" ? baseCards.slice(0, 12) : baseCards;
   const showLoadMore = cards.length > visibleCount;
 
   return (
@@ -123,7 +125,7 @@ export default function InfluencerDirectory() {
         }
       `}</style>
 
-      <section id="top-creators" className="inf-bg reveal">
+      <section id="top-creators" className="inf-bg reveal vis">
         <div className="tc" style={{ marginBottom: 14 }}>
           <span className="stag">Discover Creators</span>
           <h2 className="sh">We have access to 7,50,000 <em>creators</em> across India</h2>
