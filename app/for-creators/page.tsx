@@ -1,5 +1,6 @@
-"use client";
+ "use client";
 
+import { Suspense } from "react";
 import PageHero from "@/components/ui/PageHero";
 import StepCards, { Step } from "@/components/ui/StepCards";
 import InfluencerDirectory from "@/components/sections/InfluencerDirectory";
@@ -41,7 +42,9 @@ export default function ForCreatorsPage() {
           <p className="ssub" style={{ margin: "10px auto 0" }}>Explore top creators by category.</p>
           <span className="gold-bar" />
         </div>
-        <InfluencerDirectory />
+        <Suspense fallback={<div style={{ textAlign: "center", marginTop: 24 }}>Loading creators…</div>}>
+          <InfluencerDirectory />
+        </Suspense>
       </section>
 
       <section className="reveal">

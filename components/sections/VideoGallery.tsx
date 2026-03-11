@@ -95,8 +95,9 @@ function ReelCard({ c, big }: { c: typeof CAMPAIGNS[0]; big?: boolean }) {
             style={{
               position: "absolute", inset: 0,
               width: "100%", height: "100%",
-              objectFit: "cover", opacity: 0,
+              objectFit: "contain", opacity: 0,
               transition: "opacity 0.3s ease", zIndex: 2,
+              backgroundColor: "#000",
             }}
             onCanPlay={e => { (e.target as HTMLVideoElement).style.opacity = "1"; }}
           />

@@ -1,10 +1,10 @@
-"use client";
+ "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { creators } from "@/data/creators";
+import { creators, CREATOR_CATEGORIES, type CreatorCategory } from "@/data/creators";
 
-const CATEGORY_TABS = ["All", "Comedy", "Finance", "Parenting", "Beauty", "Fashion", "Fitness", "Food", "Gaming", "Tech", "Travel"] as const;
+const CATEGORY_TABS = ["All", ...CREATOR_CATEGORIES] as const;
 
 type Category = (typeof CATEGORY_TABS)[number];
 
@@ -17,43 +17,18 @@ type Card = {
   image?: string;
 };
 
-const comedyCards: Card[] = creators.map((c) => ({
-  name: c.name,
-  category: "Comedy",
-  followers: c.audience,
-  emoji: c.emoji,
-  bg: c.bg,
-  image: c.image,
-}));
-
-const placeholder = (category: Category, baseEmoji: string): Card[] => [
-  { name: `${category} Creator 1`, category, followers: "250K+", emoji: baseEmoji, bg: "#1a0f0a" },
-  { name: `${category} Creator 2`, category, followers: "480K+", emoji: baseEmoji, bg: "#0a0f1a" },
-  { name: `${category} Creator 3`, category, followers: "120K+", emoji: baseEmoji, bg: "#1a0a14" },
-  { name: `${category} Creator 4`, category, followers: "600K+", emoji: baseEmoji, bg: "#001a00" },
-];
-
-const CATEGORY_MAP: Record<Category, Card[]> = {
-  All: [
-    // Real comedy creators first
-    ...comedyCards,
-    // Representative placeholders from other categories
-    ...placeholder("Finance", "💰"),
-    ...placeholder("Beauty", "💄"),
-    ...placeholder("Fashion", "👗"),
-    ...placeholder("Fitness", "💪"),
-  ],
-  Comedy: comedyCards.length ? comedyCards : placeholder("Comedy", "😂"),
-  Finance: placeholder("Finance", "💰"),
-  Parenting: placeholder("Parenting", "👨‍👩‍👧"),
-  Beauty: placeholder("Beauty", "💄"),
-  Fashion: placeholder("Fashion", "👗"),
-  Fitness: placeholder("Fitness", "💪"),
-  Food: placeholder("Food", "🍕"),
-  Gaming: placeholder("Gaming", "🎮"),
-  Tech: placeholder("Tech", "📱"),
-  Travel: placeholder("Travel", "✈️"),
-};
+function buildCardsByCategory(creatorsCategory: CreatorCategory): Card[] {
+  return creators
+    .filter((c) => c.category === creatorsCategory)
+    .map((c) => ({
+      name: c.name,
+      category: creatorsCategory,
+      followers: c.audience,
+      emoji: c.emoji,
+      bg: c.bg,
+      image: c.image,
+    }));
+}
 
 export default function InfluencerDirectory() {
   const searchParams = useSearchParams();
@@ -66,6 +41,31 @@ export default function InfluencerDirectory() {
   const [active, setActive] = useState<Category>("All");
   const [visibleCount, setVisibleCount] = useState(4);
 
+  const categoryMap: Record<Category, Card[]> = useMemo(() => {
+    const map: Record<Category, Card[]> = {
+      All: [],
+      Comedy: [],
+      Finance: [],
+      Parenting: [],
+      Beauty: [],
+      Fashion: [],
+      Fitness: [],
+      Food: [],
+      Gaming: [],
+      Tech: [],
+      Travel: [],
+    };
+
+    // Fill each category from the data file
+    CREATOR_CATEGORIES.forEach((cat) => {
+      const cards = buildCardsByCategory(cat);
+      map[cat] = cards;
+      map.All = map.All.concat(cards);
+    });
+
+    return map;
+  }, []);
+
   useEffect(() => {
     if (!normalizedFromQuery) return;
     if (CATEGORY_TABS.includes(normalizedFromQuery as Category)) {
@@ -74,7 +74,7 @@ export default function InfluencerDirectory() {
     }
   }, [normalizedFromQuery]);
 
-  const cards = CATEGORY_MAP[active] ?? [];
+  const cards = categoryMap[active] ?? [];
   const showLoadMore = cards.length > visibleCount;
 
   return (
