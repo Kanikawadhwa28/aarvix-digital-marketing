@@ -34,16 +34,30 @@ export function useScrollReveal() {
     };
 
     // Initial scan
-    watchAll();
+    // Delay observing until after hydration paints, otherwise the observer can
+    // mutate server-rendered DOM (adding "vis") during hydration and cause
+    // React hydration mismatch warnings.
+    let raf2: number | null = null;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        watchAll();
+      });
+    });
 
     // Also watch for new .reveal elements on client-side navigation
     const mo = new MutationObserver(() => {
-      watchAll();
+      requestAnimationFrame(() => watchAll());
     });
-    mo.observe(document.body, { childList: true, subtree: true });
+    // Observe after the first paint as well (same reason as above)
+    const moTimer = window.setTimeout(() => {
+      mo.observe(document.body, { childList: true, subtree: true });
+    }, 0);
 
     // Cleanup: stop watching when component unmounts
     return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+      window.clearTimeout(moTimer);
       observer.disconnect();
       mo.disconnect();
     };

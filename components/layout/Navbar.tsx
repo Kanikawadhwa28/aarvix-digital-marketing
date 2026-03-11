@@ -108,7 +108,9 @@ export default function Navbar() {
   const handleMobileLink = (href: string) => {
     setMobOpen(false);
     setOpenIndex(null);
-    router.push(href);
+    // Let state update paint first so the menu closes instantly,
+    // then navigate (helps on slower devices / search-param-only routes).
+    requestAnimationFrame(() => router.push(href));
   };
 
   return (
@@ -258,8 +260,9 @@ export default function Navbar() {
           transition: transform .38s cubic-bezier(.4,0,.2,1);
           overflow-y: auto; overflow-x: hidden;
           border-left: 1px solid rgba(201,151,43,.2);
+          pointer-events: none;
         }
-        .mob-nav.open { transform: translateX(0); }
+        .mob-nav.open { transform: translateX(0); pointer-events: auto; }
         .mob-btn {
           width: 100%; background: none; border: none; cursor: pointer;
           display: flex; align-items: center; justify-content: space-between;
