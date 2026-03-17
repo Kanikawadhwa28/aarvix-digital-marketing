@@ -906,3 +906,8 @@ footer{background:#020202;border-top:1px solid var(--bdr);padding:68px 5% 30px;}
   .ov-er{font-size:10px !important;}
   .ov-cta{font-size:11px !important;padding:6px 12px !important;}
 }
+/* Hide custom cursor on touch devices */
+@media (hover: none) {
+   #cur { display: none !important; }
+   body { cursor: auto !important; }
+ }

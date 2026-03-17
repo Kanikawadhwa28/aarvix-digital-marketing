@@ -20,7 +20,7 @@ const FAQS = [
     a: "A barter collab means a creator receives your product or service in exchange for content so no cash changes hands. We handle the outreach, negotiation, and brief so the brand gets quality content and the creator gets real value.",
   },
   {
-    q: "I'm a creator so how do I get brand deals through Avenue?",
+    q: "I'm a creator so how do I get brand deals through Aarvix?",
     a: "Just reach out to us directly via the Contact page or WhatsApp. We work with creators across all sizes from nano to mega. If we think you're a good fit for a brand we're working with, we'll loop you in.",
   },
   {

@@ -3,9 +3,15 @@ import { useEffect } from "react";
 // Custom gold cursor — just a single filled circle (no outer ring)
 export function useCursor() {
   useEffect(() => {
+    // Skip on touch devices (phones/tablets)
+    if (window.matchMedia("(hover: none)").matches) return;
+
     const el = document.getElementById("cur");
     if (!el) return;
     const cur = el as HTMLDivElement;
+
+    // Show the cursor dot (hidden by default on touch)
+    cur.style.display = "block";
 
     const onMouseMove = (e: MouseEvent) => {
       cur.style.left = `${e.clientX}px`;

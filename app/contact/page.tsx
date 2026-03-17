@@ -230,7 +230,7 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
             <span className="cal-or">or</span>
             <div className="cal-priority">
               <p><strong>Already booked?</strong> Want to be seen as a priority client?</p>
-              <a href="https://wa.me/919801458766?text=Hi%20Avenue!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
+              <a href="https://wa.me/919801458766?text=Hi%Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
                 className="btn btn-y" target="_blank" rel="noreferrer"
                 style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <WhatsAppIcon /> Message Us on WhatsApp →
@@ -254,7 +254,7 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
           <div className="cal-actions">
             <div className="cal-priority">
               <p><strong>Get priority access</strong> — reach us directly on WhatsApp.</p>
-              <a href="https://wa.me/919801458766?text=Hi%20Avenue!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
+              <a href="https://wa.me/919801458766?text=Hi%Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
                 className="btn btn-y" target="_blank" rel="noreferrer"
                 style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <WhatsAppIcon /> Message Us on WhatsApp →
@@ -283,7 +283,7 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
       {bookingState === "idle" && (
         <div className="cal-noslot">
           <span>😕 Can&apos;t find a free slot?</span>
-          <a href="https://wa.me/919801458766?text=Hi%20Avenue!%20I%20checked%20the%20calendar%20but%20couldn%27t%20find%20a%20free%20slot.%20Can%20we%20sort%20a%20time%3F"
+          <a href="https://wa.me/919801458766?text=Hi%20Aarvix!%20I%20checked%20the%20calendar%20but%20couldn%27t%20find%20a%20free%20slot.%20Can%20we%20sort%20a%20time%3F"
             target="_blank" rel="noreferrer" className="btn btn-y"
             style={{ fontSize: "0.85rem", padding: "8px 16px", display: "inline-flex", alignItems: "center", gap: 8 }}>
             <WhatsAppIcon /> Text us on WhatsApp →
@@ -331,7 +331,7 @@ function ContactFormInner() {
 
     setSendStatus("sending");
     try {
-      const res = await fetch("https://formsubmit.co/ajax/avenueteamofficial@gmail.com", {
+      const res = await fetch("https://formsubmit.co/ajax/aarvixmarketing@gmail.com", {
         method: "POST",
         headers: { Accept: "application/json" },
         body: fd,
