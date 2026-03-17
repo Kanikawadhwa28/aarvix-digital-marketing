@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const ROW_1 = ["Zepto 🛒", "CoinDCX", "Aditya Birla", "BharatMatrimony", "Naukri.com", "Cashify", "Hostinger", "Kotak 811"];
 const ROW_2 = ["AirtelPayBank", "Panel Station", "YouGov", "Flipkart 🛒", "TATA CLiQ", "boAt 🎧", "Samsung", "Snapdeal"];
-const TIPS = ["500+ campaigns", "3x avg ROI", "₹500Cr+ managed", "Trusted partner", "#1 platform", "Top brand", "Since 2016", "Best results"];
+const TIPS = ["500+ campaigns", "3x avg ROI", "₹*** managed", "Trusted partner", "#1 platform", "Top brand", "Since 2016", "Best results"];
 
 export default function BrandMarquee() {
   useEffect(() => {
@@ -29,7 +29,8 @@ export default function BrandMarquee() {
   return (
     <section className="mq-bg reveal" style={{ padding: "56px 0" }}>
       <div className="tc" style={{ marginBottom: 28, padding: "0 5%" }}>
-        <h2 className="sh"><em>Driving Business</em> Impact</h2>
+        <h2 className="sh"><em>Turning Vision Into
+        </em> Real Growth</h2>
         <p className="ssub" style={{ margin: "10px auto 0" }}>
           Trusted by India&apos;s fastest-growing brands — from D2C startups to enterprise giants
         </p>

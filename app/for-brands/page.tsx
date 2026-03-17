@@ -142,7 +142,7 @@ export default function ForBrandsPage() {
           </div>
         </div>
         <div className="brand-stats">
-          <div className="brand-stat"><div className="brand-stat-val">₹500Cr+</div><div className="brand-stat-label">Managed</div></div>
+          <div className="brand-stat"><div className="brand-stat-val">₹***</div><div className="brand-stat-label">Managed</div></div>
           <div className="brand-stat"><div className="brand-stat-val">3x</div><div className="brand-stat-label">Avg ROI</div></div>
           <div className="brand-stat"><div className="brand-stat-val">500+</div><div className="brand-stat-label">Campaigns</div></div>
         </div>

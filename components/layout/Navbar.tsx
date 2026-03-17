@@ -38,6 +38,7 @@ const NAV_ITEMS: NavItem[] = [
       { icon: "🎮", text: "Gaming",    href: "/for-creators?category=gaming" },
       { icon: "📱", text: "Tech",      href: "/for-creators?category=tech" },
       { icon: "✈️", text: "Travel",    href: "/for-creators?category=travel" },
+      { icon: "🎥", text: "Vlogger",    href: "/for-creators?category=vlogger" },
     ],
     wide: true, matchPaths: ["/for-creators"],
   },

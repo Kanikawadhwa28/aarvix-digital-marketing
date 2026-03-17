@@ -32,7 +32,7 @@ const FOOTER_COLS = [
   },
   {
     title: "Platform",
-    links: ["Dashboard", "Fair Price Index", "Competitor Tracker", "Case Studies"],
+    links: ["Blogs", "Our Work"],
   },
   {
     title: "Top Niches",
@@ -56,7 +56,8 @@ export default function Footer() {
     if (link === "For Creators") return "/for-creators";
     if (link === "Platform") return "/platform";
     if (link === "Blog") return "/platform#blog";
-    if (["Dashboard", "Fair Price Index", "Competitor Tracker"].includes(link)) return "/platform#products";
+    if (["Blogs"].includes(link)) return "/platform#blog";
+    if (link === "Our Work") return "/platform#work";
     if (link === "Case Studies") return "/platform#work";
     return "/";
   };

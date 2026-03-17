@@ -154,7 +154,7 @@ function WhatsAppIcon({ size = 20 }: { size?: number }) {
   );
 }
 
-const CALENDLY_URL = "https://calendly.com/avenueteamofficial/30min";
+const CALENDLY_URL = "https://calendly.com/aarvixmarketing/30min";
 const SCRIPT_ID    = "calendly-widget-js";
 const CSS_ID       = "calendly-widget-css";
 type BookingState  = "idle" | "booked" | "rebooked";

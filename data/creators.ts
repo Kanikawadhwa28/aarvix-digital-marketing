@@ -9,6 +9,7 @@ export const CREATOR_CATEGORIES = [
   "Gaming",
   "Tech",
   "Travel",
+  "Vlogger",
 ] as const;
 
 export type CreatorCategory = (typeof CREATOR_CATEGORIES)[number];
@@ -31,14 +32,14 @@ export const creators: Creator[] = [
   { name: "Bharti Singh",       audience: "9.4M+",  emoji: "😄", bg: "#1a000a", image: "Bharti.png", category: "Comedy" },
   { name: "Nazim Ahmad",        audience: "6.7M+",  emoji: "🎭", bg: "#001a0a", image: "Nazim.png",  category: "Comedy" },
   { name: "Wasim Ahmad",        audience: "3.1M+",  emoji: "🎬", bg: "#0a001a", image: "Wasim.png",  category: "Comedy" },
-  { name: "Nishu Tiwari",       audience: "1.6M+",  emoji: "💃", bg: "#1a1000", image: "Nishu.png",  category: "Comedy" },
+  { name: "Nishu Tiwari",       audience: "1.6M+",  emoji: "💃", bg: "#1a1000", image: "Nishu.png",  category: "Vlogger" },
   { name: "Harsh Limbachiyaa",  audience: "1.6M+",  emoji: "😂", bg: "#001018", image: "Harsh.png",  category: "Comedy" },
-  { name: "Sneha Sachdeva",     audience: "1.2M+",  emoji: "✨", bg: "#180010", image: "Sneha.png",  category: "Comedy" },
+  { name: "Sneha Sachdeva",     audience: "1.2M+",  emoji: "✨", bg: "#180010", image: "Sneha.png",  category: "Vlogger" },
   { name: "Abhishek Kashiap",   audience: "1M+",    emoji: "🎯", bg: "#001a14", image: "Abhishek.png", category: "Comedy" },
   { name: "Mohit Narang",       audience: "569K+",  emoji: "🤩", bg: "#140010", image: "Mohit.png",    category: "Comedy" },
   { name: "Sonia Rawat",        audience: "556K+",  emoji: "💄", bg: "#1a0808", image: "Soniya.png",   category: "Comedy" },
-  { name: "Mayank Kaushik",     audience: "227K+",  emoji: "📱", bg: "#080a1a", image: "Mayank.png",   category: "Comedy" },
-  { name: "Aayush Sapra",       audience: "206K+",  emoji: "🏋️", bg: "#001810", image: "Aayush.png", category: "Comedy" },
+  { name: "Mayank Kaushik",     audience: "227K+",  emoji: "📱", bg: "#080a1a", image: "Mayank.png",   category: "Vlogger" },
+  { name: "Aayush Sapra",       audience: "206K+",  emoji: "🍰", bg: "#001810", image: "Aayush.png", category: "Vlogger" },
   { name: "Tanmay Bhat",       audience: "2M+",  emoji: "😄", bg: "#1a000a", image: "Tanmay.png", category: "Comedy" },
 
 

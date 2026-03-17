@@ -54,6 +54,7 @@ export default function InfluencerDirectory() {
       Gaming: [],
       Tech: [],
       Travel: [],
+      Vlogger: [],
     };
 
     // Fill each category from the data file

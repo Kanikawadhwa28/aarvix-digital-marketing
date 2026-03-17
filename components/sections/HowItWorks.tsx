@@ -38,7 +38,7 @@ const STEPS = [
         <div className="tc">
           <span className="stag">Process</span>
           <h2 className="sh">
-            Launch Your Campaign in <em>4 Simple Steps</em>
+          Your Brand's Reach, <em>Built in 4 Steps</em>
           </h2>
           <span className="gold-bar" />
         </div>
