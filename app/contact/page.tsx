@@ -230,7 +230,7 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
             <span className="cal-or">or</span>
             <div className="cal-priority">
               <p><strong>Already booked?</strong> Want to be seen as a priority client?</p>
-              <a href="https://wa.me/919801458766?text=Hi%Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
+              <a href="https://wa.me/919801458766?text=Hi%20Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
                 className="btn btn-y" target="_blank" rel="noreferrer"
                 style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <WhatsAppIcon /> Message Us on WhatsApp →
@@ -254,7 +254,7 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
           <div className="cal-actions">
             <div className="cal-priority">
               <p><strong>Get priority access</strong> — reach us directly on WhatsApp.</p>
-              <a href="https://wa.me/919801458766?text=Hi%Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
+              <a href="https://wa.me/919801458766?text=Hi%20Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
                 className="btn btn-y" target="_blank" rel="noreferrer"
                 style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <WhatsAppIcon /> Message Us on WhatsApp →
@@ -472,7 +472,7 @@ export default function ContactPage() {
             <div className="cp-card-emoji">💬</div>
             <h3>Chat on WhatsApp</h3>
             <p>Quickest way to reach us directly.</p>
-            <a href="https://wa.me/919801458766?text=Hi%Aarvix%20Marketing%20Agency!%20I%20came%20across%20your%20website%20and%20I%27m%20interested%20in%20discussing%20a%20potential%20campaign%20or%20collaboration.%20Could%20we%20connect%3F"
+            <a href="https://wa.me/919801458766?text=Hi%20Aarvix%20Marketing%20Agency!%20I%20came%20across%20your%20website%20and%20I%27m%20interested%20in%20discussing%20a%20potential%20campaign%20or%20collaboration.%20Could%20we%20connect%3F"
               className="btn btn-y" target="_blank" rel="noreferrer"
               style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               <WhatsAppIcon /> Open WhatsApp →

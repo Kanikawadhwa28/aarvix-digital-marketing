@@ -192,7 +192,7 @@ export default function InfluencerDirectory() {
                 <div className="icard-ov">
                   <div style={{ fontSize: 48, lineHeight: 1, marginBottom: 8 }}>{inf.emoji}</div>
                   <div className="ov-f">{inf.followers}</div>
-                  <div className="ov-er" style={{ marginBottom: 12 }}>Audience size</div>
+                  <div className="ov-er" style={{ marginBottom: 12 }}>Instagram Followers</div>
                 </div>
 
               </div>

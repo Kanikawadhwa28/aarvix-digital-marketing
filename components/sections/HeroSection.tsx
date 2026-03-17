@@ -313,7 +313,7 @@ export default function HeroSection() {
             Aarvix Digital Marketing
           </span>
 
-          <h1 className="hero-cin-h1" aria-label="Influencer Marketing, Done Right.">
+          <h1 className="hero-cin-h1" aria-label="Influencer Marketing, Simplified">
             {WORDS.slice(0, 2).map((w, i) => (
               <span
                 key={w.text}
@@ -332,8 +332,8 @@ export default function HeroSection() {
           </h1>
 
           <p className={`hero-cin-sub${loaded ? " in" : ""}`}>
-            We have access to 7,50,000+ creators across 10+ categories —
-            connecting brands with the right audience, at scale.
+            We have access to 7,50,000+ creators across 10+ categories:
+            connecting brands with the right audience.
           </p>
 
           <div
