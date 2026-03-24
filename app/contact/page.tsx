@@ -60,7 +60,7 @@ const CONTACT_STYLES = `
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 10px;
     padding: 12px 14px;
-    font-size: 16px; /* 16px prevents iOS zoom */
+    font-size: 16px;
     color: var(--text, #f5f5f7);
     font-family: var(--body, 'DM Sans', sans-serif);
     outline: none;
@@ -184,7 +184,9 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
       document.head.appendChild(link);
     }
     const init = () => {
-      const w = window as typeof window & { Calendly?: { initInlineWidget: (o: { url: string; parentElement: HTMLElement }) => void } };
+      const w = window as typeof window & {
+        Calendly?: { initInlineWidget: (o: { url: string; parentElement: HTMLElement }) => void };
+      };
       if (w.Calendly && containerRef.current) {
         containerRef.current.innerHTML = "";
         w.Calendly.initInlineWidget({ url: CALENDLY_URL, parentElement: containerRef.current });
@@ -202,7 +204,11 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
   };
 
   useEffect(() => { mountWidget(); }, []);
-  const handleDismiss = () => { setBookingState("idle"); setTimeout(mountWidget, 50); };
+
+  const handleDismiss = () => {
+    setBookingState("idle");
+    setTimeout(mountWidget, 50);
+  };
 
   return (
     <section className="cp-section reveal" id="book-a-call">
@@ -230,9 +236,11 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
             <span className="cal-or">or</span>
             <div className="cal-priority">
               <p><strong>Already booked?</strong> Want to be seen as a priority client?</p>
-              <a href="https://wa.me/919801458766?text=Hi%20Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
+              <a
+                href="https://wa.me/919205297136?text=Hi%20Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
                 className="btn btn-y" target="_blank" rel="noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
                 <WhatsAppIcon /> Message Us on WhatsApp →
               </a>
               <span className="cp-note">⚡ We reply within 24 hours.</span>
@@ -254,9 +262,11 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
           <div className="cal-actions">
             <div className="cal-priority">
               <p><strong>Get priority access</strong> — reach us directly on WhatsApp.</p>
-              <a href="https://wa.me/919801458766?text=Hi%20Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
+              <a
+                href="https://wa.me/919205297136?text=Hi%20Aarvix!%20I%20already%20have%20a%20meeting%20booked%20and%20I%27d%20like%20to%20discuss%20priority%20onboarding."
                 className="btn btn-y" target="_blank" rel="noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+              >
                 <WhatsAppIcon /> Message Us on WhatsApp →
               </a>
               <span className="cp-note">⚡ We reply within 24 hours.</span>
@@ -283,9 +293,11 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
       {bookingState === "idle" && (
         <div className="cal-noslot">
           <span>😕 Can&apos;t find a free slot?</span>
-          <a href="https://wa.me/919801458766?text=Hi%20Aarvix!%20I%20checked%20the%20calendar%20but%20couldn%27t%20find%20a%20free%20slot.%20Can%20we%20sort%20a%20time%3F"
+          <a
+            href="https://wa.me/919205297136?text=Hi%20Aarvix!%20I%20checked%20the%20calendar%20but%20couldn%27t%20find%20a%20free%20slot.%20Can%20we%20sort%20a%20time%3F"
             target="_blank" rel="noreferrer" className="btn btn-y"
-            style={{ fontSize: "0.85rem", padding: "8px 16px", display: "inline-flex", alignItems: "center", gap: 8 }}>
+            style={{ fontSize: "0.85rem", padding: "8px 16px", display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <WhatsAppIcon /> Text us on WhatsApp →
           </a>
         </div>
@@ -295,15 +307,15 @@ function CalendlyEmbed({ height = 600 }: { height?: number }) {
 }
 
 function ContactFormInner() {
-  const searchParams    = useSearchParams();
+  const searchParams = useSearchParams();
   const [queryDefault, setQueryDefault] = useState("");
   const [sendStatus, setSendStatus] = useState<"idle" | "sending" | "sent" | "error" | "more">("idle");
+  const formRef = useRef<HTMLFormElement>(null);
 
-  // Only read searchParams on client to avoid SSR/client HTML mismatch
   useEffect(() => {
     const presetQuery = searchParams.get("query") || "";
     const isCreator   = searchParams.get("creator") === "1";
-    setQueryDefault(presetQuery || (isCreator ? "Creator " : ""));
+    setQueryDefault(presetQuery || (isCreator ? "Creator" : ""));
   }, [searchParams]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -317,49 +329,47 @@ function ContactFormInner() {
     const query   = (raw.get("query")   || queryDefault || "").toString().trim();
     const message = (raw.get("message") || "").toString().trim();
 
-    // Build FormData payload — more reliable than JSON with formsubmit.co
-    const fd = new FormData();
-    fd.append("name",     name);
-    fd.append("email",    email);
-    fd.append("phone",    phone   || "Not provided");
-    fd.append("query",    query   || "General enquiry");
-    fd.append("message",  message);
-    fd.append("_subject", "New enquiry from Aarvix Digital Marketing website");
-    fd.append("_captcha", "false");
-    fd.append("_template","table");
-    fd.append("_next",    ""); // prevent redirect
-
     setSendStatus("sending");
+
     try {
       const res = await fetch("https://formsubmit.co/ajax/aarvixmarketing@gmail.com", {
         method: "POST",
-        headers: { Accept: "application/json" },
-        body: fd,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone:     phone   || "Not provided",
+          query:     query   || "General enquiry",
+          message,
+          _subject:  "New enquiry from Aarvix Digital Marketing website",
+          _captcha:  "false",
+          _template: "table",
+        }),
       });
 
-      // FormSubmit sometimes returns non-200 even on success
-      // Treat any completed fetch (no network error) as sent
-      let isSuccess = true;
-      try {
-        const json = await res.json();
-        // Only fail if explicitly told so
-        if (json.success === false || json.success === "false") isSuccess = false;
-      } catch {
-        // Can't parse JSON — assume sent if status < 500
-        if (res.status >= 500) isSuccess = false;
-      }
+      const json = await res.json().catch(() => null);
+
+      // formsubmit returns { success: "true" } — note: string, not boolean
+      const isSuccess =
+        res.ok &&
+        json !== null &&
+        (json.success === true || json.success === "true");
 
       if (isSuccess) {
         setSendStatus("sent");
-        e.currentTarget.reset();
+        formRef.current?.reset();
         setQueryDefault("");
         setTimeout(() => setSendStatus("more"), 2500);
       } else {
+        console.error("FormSubmit error:", json);
         setSendStatus("error");
         setTimeout(() => setSendStatus("idle"), 4000);
       }
-    } catch {
-      // Actual network failure
+    } catch (err) {
+      console.error("FormSubmit network error:", err);
       setSendStatus("error");
       setTimeout(() => setSendStatus("idle"), 4000);
     }
@@ -373,7 +383,7 @@ function ContactFormInner() {
         <span className="gold-bar" />
       </div>
 
-      <form className="cp-form" onSubmit={handleSubmit}>
+      <form className="cp-form" ref={formRef} onSubmit={handleSubmit}>
         <div className="cp-row">
           <div className="cp-field">
             <label htmlFor="cf-name">Name*</label>
@@ -422,15 +432,28 @@ function ContactFormInner() {
           <textarea id="cf-message" name="message" required rows={4} placeholder="Tell us more…" />
         </div>
 
-        {sendStatus === "idle"    && <button type="submit" className="btn btn-y">Send Message →</button>}
-        {sendStatus === "sending" && <div className="cp-status">Sending…</div>}
-        {sendStatus === "sent"    && <div className="cp-status cp-status-ok">✅ Message sent! We'll get back to you soon.</div>}
-        {sendStatus === "error"   && (
+        {sendStatus === "idle" && (
+          <button type="submit" className="btn btn-y">Send Message →</button>
+        )}
+        {sendStatus === "sending" && (
+          <div className="cp-status">Sending…</div>
+        )}
+        {sendStatus === "sent" && (
+          <div className="cp-status cp-status-ok">✅ Message sent! We&apos;ll get back to you soon.</div>
+        )}
+        {sendStatus === "error" && (
           <div className="cp-status cp-status-err">
-            ⚠️ Something went wrong. Please try again or reach us on WhatsApp.
+            ⚠️ Something went wrong. Please try again or{" "}
+            <a
+              href="https://wa.me/919205297136"
+              target="_blank" rel="noreferrer"
+              style={{ color: "#25D366", textDecoration: "underline" }}
+            >
+              reach us on WhatsApp
+            </a>.
           </div>
         )}
-        {sendStatus === "more"    && (
+        {sendStatus === "more" && (
           <>
             <p className="cp-more">Do you have something more to send?</p>
             <button type="submit" className="btn btn-y">Send Again →</button>
@@ -444,7 +467,6 @@ function ContactFormInner() {
 export default function ContactPage() {
   return (
     <>
-      {/* Styles injected once at top level — apply to ALL sections */}
       <style>{CONTACT_STYLES}</style>
 
       <PageHero
@@ -472,9 +494,11 @@ export default function ContactPage() {
             <div className="cp-card-emoji">💬</div>
             <h3>Chat on WhatsApp</h3>
             <p>Quickest way to reach us directly.</p>
-            <a href="https://wa.me/919801458766?text=Hi%20Aarvix%20Marketing%20Agency!%20I%20came%20across%20your%20website%20and%20I%27m%20interested%20in%20discussing%20a%20potential%20campaign%20or%20collaboration.%20Could%20we%20connect%3F"
+            <a
+              href="https://wa.me/919205297136?text=Hi%20Aarvix%20Marketing%20Agency!%20I%20came%20across%20your%20website%20and%20I%27m%20interested%20in%20discussing%20a%20potential%20campaign%20or%20collaboration.%20Could%20we%20connect%3F"
               className="btn btn-y" target="_blank" rel="noreferrer"
-              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+            >
               <WhatsAppIcon /> Open WhatsApp →
             </a>
             <span className="cp-note">⚡ We reply within 24 hours.</span>
@@ -483,8 +507,6 @@ export default function ContactPage() {
       </section>
 
       <CalendlyEmbed />
-
-      {/* Team showcase removed from contact page as requested */}
     </>
   );
 }

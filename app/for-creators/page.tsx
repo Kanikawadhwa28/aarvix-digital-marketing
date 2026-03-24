@@ -35,15 +35,9 @@ export default function ForCreatorsPage() {
         </div>
       </section>
 
-      <section className="reveal">
-        <div className="tc" style={{ marginBottom: 26 }}>
-          <span className="stag">Community</span>
-          <h2 className="sh">Creators Already in the <em>Aarvix Digital Marketing</em> Network</h2>
-          <p className="ssub" style={{ margin: "10px auto 0" }}>Explore top creators by category.</p>
-          <span className="gold-bar" />
-        </div>
+      <section className="reveal" style={{ paddingTop: 0, paddingBottom: 0, marginTop: 0, marginBottom: 0 }}>
         <Suspense fallback={<div style={{ textAlign: "center", marginTop: 24 }}>Loading creators…</div>}>
-          <InfluencerDirectory />
+         <InfluencerDirectory />
         </Suspense>
       </section>
 
