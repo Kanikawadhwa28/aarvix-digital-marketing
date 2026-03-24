@@ -76,7 +76,6 @@ export default function Navbar() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [mobOpen, setMobOpen]     = useState(false);
   const [scrolled, setScrolled]   = useState(false);
-  // Track hover state per item for desktop
   const hoverTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
 
   useEffect(() => {
@@ -90,7 +89,6 @@ export default function Navbar() {
   const isActive = (item: NavItem) =>
     item.matchPaths.some(p => pathname === p || (p !== "/" && pathname.startsWith(p)));
 
-  // Desktop: open on mouse enter, close on mouse leave with delay
   const handleMouseEnter = (i: number) => {
     if (hoverTimers.current[i]) clearTimeout(hoverTimers.current[i]);
     setOpenIndex(i);
@@ -101,7 +99,6 @@ export default function Navbar() {
     }, 120);
   };
 
-  // Navigate + close everything
   const navigate = (href: string) => {
     setOpenIndex(null);
     setMobOpen(false);
@@ -138,6 +135,25 @@ export default function Navbar() {
           display: flex; align-items: center; gap: 9px;
           text-decoration: none; flex-shrink: 0; margin-right: 24px;
         }
+
+        /* ── LOGO SIZE FIX: enlarged box, image contained inside ── */
+        a.nav-logo .brand-logo {
+          width: 46px !important;
+          height: 46px !important;
+          border-radius: 10px !important;
+          overflow: hidden !important;
+          flex-shrink: 0;
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+        }
+        a.nav-logo .brand-logo img {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: contain !important;
+          display: block;
+        }
+
         a.nav-logo .nav-logo-text {
           font-family: var(--disp, 'Syne', sans-serif);
           font-size: 20px; font-weight: 800;
@@ -175,13 +191,11 @@ export default function Navbar() {
           text-shadow: 0 0 12px rgba(244,208,111,.3);
         }
 
-        /* ── KEY FIX: dropdown is always rendered, shown via opacity+pointer-events only ── */
         .nav-drop {
           position: absolute; top: 100%; left: 50%;
           transform: translateX(-50%) translateY(-4px);
           background: #050505; border: 1px solid rgba(201,151,43,.25);
           border-radius: 16px; padding: 10px; min-width: 190px;
-          /* NO visibility:hidden — use opacity + pointer-events only */
           opacity: 0;
           pointer-events: none;
           transition: opacity .18s ease, transform .18s ease;
@@ -191,14 +205,12 @@ export default function Navbar() {
         .nav-drop.wide { min-width: 320px; }
         .nav-drop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
 
-        /* Open state — immediately clickable */
         .nav-item.open > .nav-drop {
           opacity: 1;
           pointer-events: auto;
           transform: translateX(-50%) translateY(4px);
         }
 
-        /* ── Dropdown links — use <a> tags for reliable navigation ── */
         .nav-drop a {
           display: flex; align-items: center; gap: 8px;
           padding: 8px 10px; border-radius: 8px;
@@ -303,6 +315,10 @@ export default function Navbar() {
           .hbg        { display: flex !important; }
           a.nav-logo .nav-logo-text { font-size: 15px; }
           a.nav-logo { margin-right: 0; }
+          a.nav-logo .brand-logo {
+            width: 38px !important;
+            height: 38px !important;
+          }
         }
       `}</style>
 
@@ -340,7 +356,6 @@ export default function Navbar() {
                   </Link>
                 ) : (
                   <>
-                    {/* Button just toggles open state — actual nav happens via links below */}
                     <button
                       className="nav-a"
                       onClick={() => setOpenIndex(prev => prev === i ? null : i)}
@@ -349,7 +364,6 @@ export default function Navbar() {
                       {item.label} <ChevronDown open={openIndex === i} />
                     </button>
 
-                    {/* Dropdown — uses plain <a> tags for bulletproof navigation */}
                     <div className={`nav-drop${item.wide ? " wide" : ""}`}>
                       {item.wide ? (
                         <div className="nav-drop-grid">
@@ -358,7 +372,6 @@ export default function Navbar() {
                               key={link.text}
                               href={link.href}
                               onMouseDown={(e) => {
-                                // onMouseDown fires before blur, ensuring navigation always works
                                 e.preventDefault();
                                 setOpenIndex(null);
                                 window.location.assign(link.href);
